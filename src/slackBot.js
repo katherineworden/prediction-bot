@@ -696,72 +696,29 @@ class SlackBot {
     const isAdmin = this.isAdmin(userId);
     let helpText = `
 *Prediction Market Commands:*
-The main market is **LECTURE** with outcomes 1-18 (lectures 1-15 + guest lectures 16-18)
+Market: **LECTURE** (outcomes 1-18: lectures 1-15 + guest lectures 16-18)
 
-• \`@bot buy <market_id> <outcome_id> <quantity> [price]\` - Buy shares of an outcome
-  Example: \`@bot buy LECTURE 8 10 0.45\` - Buy 10 shares of lecture 8 at $0.45 each
-  Example: \`@bot buy LECTURE 15 5\` - Buy 5 shares at current market price
+• \`@bot list markets\` - Show all markets
+• \`@bot market <market_id>\` - Show market details
+• \`@bot buy <market_id> <outcome_id> <quantity> [price]\` - Buy shares
+• \`@bot sell <market_id> <outcome_id> <quantity> [price]\` - Sell shares
+• \`@bot bundle-buy <market_id> <quantity>\` - Buy complete sets ($1 each)
+• \`@bot bundle-sell <market_id> <quantity>\` - Sell complete sets
+• \`@bot balance\` - Show your balance (private)
+• \`@bot positions <market_id>\` - Show your positions (private)
+• \`@bot orders <market_id>\` - Show your open orders (private)
+• \`@bot cancel <market_id> <outcome_id> <order_id>\` - Cancel order
 
-• \`@bot sell <market_id> <outcome_id> <quantity> [price]\` - Sell shares of an outcome
-  Example: \`@bot sell LECTURE 12 5 0.65\` - Sell 5 shares of lecture 12 at $0.65 each
-  Example: \`@bot sell LECTURE 3 10\` - Sell 10 shares at current market price
-
-• \`@bot bundle-buy <market_id> <quantity>\` - Buy complete sets of all outcomes ($1 each)
-  Example: \`@bot bundle-buy LECTURE 10\` - Buy 10 complete sets (10 shares of each lecture)
-
-• \`@bot bundle-sell <market_id> <quantity>\` - Sell complete sets of all outcomes
-  Example: \`@bot bundle-sell LECTURE 5\` - Sell 5 complete sets (5 shares of each lecture)
-
-• \`@bot market <market_id>\` - Show market order book
-  Example: \`@bot market LECTURE\` - Show the order book for LECTURE
-
-• \`@bot balance\` - Show your current balance
-  Note: Available via DM to reduce channel spam
-
-• \`@bot position <market_id>\` - Show your positions in a market
-  Example: \`@bot position LECTURE\` - Show your positions in LECTURE
-  Note: Available via DM to reduce channel spam
-
-• \`@bot orders <market_id>\` - Show your open orders in a market
-  Example: \`@bot orders LECTURE\` - Show your pending orders in LECTURE
-
-• \`@bot cancel <market_id> <outcome_id> <order_id>\` - Cancel an open order
-  Example: \`@bot cancel LECTURE 8 123\` - Cancel order ID 123 for lecture 8
-  Note: This returns your escrowed funds/shares
-
-• \`@bot help\` - Show this help message`;
+*DM Commands:* \`balance\`, \`positions LECTURE\`, \`bundle-buy\`, \`bundle-sell\``;
     
     if (isAdmin) {
       helpText += `
 
 *Admin Commands:*
-• \`@bot create market <market_id> "<outcome1,outcome2,...>" "<description>"\` - Create a new market
-  Example: \`@bot create market LECTURE "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18" "Which lecture will be most relevant?"\`
-  Note: Always use quotes around outcomes and description, especially if they contain spaces or commas
-
-• \`@bot resolve <market_id> <winning_outcome_id>\` - Resolve a market
-  Example: \`@bot resolve LECTURE 8\` - Resolve LECTURE with lecture 8 as winner
-  
-• \`@bot export-data\` - Export current market data for backup
-  This command shows a summary of markets and provides the complete JSON data that can be saved to
-  market_data.json for persistence across deployments`;
+• \`@bot create market <market_id> "<outcomes>" "<description>"\` - Create market
+• \`@bot resolve <market_id> <winning_outcome_id>\` - Resolve market
+• \`@bot export-data\` - Export market data`;
     }
-    
-    helpText += `
-
-*How It Works:*
-- Each market can have multiple outcomes (shown with IDs when created)
-- Prices must be between $0.01 and $0.99 (representing probability)
-- Users start with $1000 balance
-- Orders are placed in escrow until fulfilled or cancelled by user
-- Bundle trading ensures price efficiency (all outcomes sum to $1)
-- When a market resolves, winning outcome shares pay $1 each
-
-*Private Commands (Direct Message):*
-You can DM the bot directly for private commands:
-• "balance" - Check your balance privately
-• "position <market_id>" - Check your positions in a market privately
-• "help" - Get help in private`;
     
     await this.sendMessage(channel, helpText, thread_ts);
   }
