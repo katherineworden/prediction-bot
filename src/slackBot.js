@@ -78,6 +78,7 @@ class SlackBot {
           await this.handleBalance(channel, userId, thread_ts);
           break;
         case 'position':
+        case 'positions':
           await this.handlePosition(channel, userId, argsText, thread_ts);
           break;
         case 'bundle-buy':
@@ -333,7 +334,11 @@ class SlackBot {
         }
       }
     } catch (error) {
-      await this.sendMessage(channel, `Error: ${error.message}`, thread_ts);
+      let errorMessage = `Error: ${error.message}`;
+      if (error.message.includes('Only 0 units could be filled')) {
+        errorMessage += '\n\nNo matching orders available. Try:\n• Placing a limit order with a price: `@bot buy ' + marketId + ' ' + outcomeId + ' ' + quantity + ' 0.40`\n• Using bundle-buy to get shares: `@bot bundle-buy ' + marketId + ' 5`';
+      }
+      await this.sendMessage(channel, errorMessage, thread_ts);
     }
   }
 
@@ -388,7 +393,11 @@ class SlackBot {
         }
       }
     } catch (error) {
-      await this.sendMessage(channel, `Error: ${error.message}`, thread_ts);
+      let errorMessage = `Error: ${error.message}`;
+      if (error.message.includes('Only 0 units could be filled')) {
+        errorMessage += '\n\nNo matching orders available. Try:\n• Placing a limit order with a price: `@bot sell ' + marketId + ' ' + outcomeId + ' ' + quantity + ' 0.60`\n• Someone needs to place buy orders first';
+      }
+      await this.sendMessage(channel, errorMessage, thread_ts);
     }
   }
 
@@ -764,7 +773,7 @@ Market: **LECTURE** (outcomes 1-18: lectures 1-15 + guest lectures 16-18)
 • \`@bot bundle-buy <market_id> <quantity>\` - Buy complete sets ($1 each)
 • \`@bot bundle-sell <market_id> <quantity>\` - Sell complete sets
 • \`@bot balance\` - Show your balance (private)
-• \`@bot positions <market_id>\` - Show your positions (private)
+• \`@bot position <market_id>\` or \`@bot positions <market_id>\` - Show your positions (private)
 • \`@bot orders <market_id>\` - Show your open orders (private)
 • \`@bot cancel <market_id> <outcome_id> <order_id>\` - Cancel order
 

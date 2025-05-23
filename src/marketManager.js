@@ -102,10 +102,10 @@ class MarketManager {
       throw new Error('No positions in this market');
     }
     
-    for (const [outcomeId, _] of market.outcomes) {
+    for (const [outcomeId, outcome] of market.outcomes) {
       const position = marketPositions.get(outcomeId) || 0;
       if (position < quantity) {
-        throw new Error(`Insufficient shares of outcome ${outcomeId}`);
+        throw new Error(`Insufficient shares of outcome ${outcomeId} (${outcome.name}). You have ${position} but need ${quantity}`);
       }
     }
     
