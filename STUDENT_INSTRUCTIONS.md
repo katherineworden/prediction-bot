@@ -143,10 +143,13 @@ A: No, only staff can create and resolve markets.
 A: Staff will resolve markets at the end of the quarter when the real outcome is known.
 
 **Q: Can I cancel a trade?**
-A: No, all trades are final. Think before you trade!
+A: Yes! You can cancel open orders that haven't been filled yet using `@bot cancel [market_id] [outcome_id] [order_id]`. This returns your escrowed money or shares. However, once an order is executed (matched with another trader), that transaction is final.
 
 **Q: How do I see my trading history?**
-A: Use `@bot positions` to see current holdings. Full history isn't shown but you can track your balance changes.
+A: Use `@bot positions` to see current holdings and `@bot orders [market_id]` to see pending orders. Full history isn't shown but you can track your balance changes.
+
+**Q: How do I find my Order ID to cancel?**
+A: When you place a buy or sell order, you'll get a confirmation message with the Order ID. You can also use `@bot orders [market_id]` to see all your open orders with their IDs.
 
 **Q: What happens if I run out of points?**
 A: You can still participate in markets that resolve in your favor, but you won't be able to make new trades until your balance increases.
