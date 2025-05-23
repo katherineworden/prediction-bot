@@ -240,9 +240,17 @@ class SlackBot {
       args.push(match[1] || match[2]);
     }
     
-    const marketId = args[0];
-    const outcomesStr = args[1];
-    const description = args.slice(2).join(' ');
+    console.log('Parsed args:', args); // Debug logging
+    
+    // Check if first arg is "market" keyword
+    if (args[0] !== 'market') {
+      await this.sendMessage(channel, 'Usage: @bot create market <market_id> "outcome1,outcome2,..." "description"', thread_ts);
+      return;
+    }
+    
+    const marketId = args[1];
+    const outcomesStr = args[2];
+    const description = args[3];
     
     if (!marketId || !outcomesStr || !description) {
       await this.sendMessage(channel, 'Usage: @bot create market <market_id> "outcome1,outcome2,..." "description"', thread_ts);
