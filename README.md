@@ -176,23 +176,23 @@ Students learn by:
 
 ```bash
 # Create a market (admin only)
-@bot create market "Will it rain tomorrow?" "Yes" "No"
+@bot create market "LECTURE" "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18" "Which lecture will be most relevant?"
 
 # Students trade
-@bot bundle-buy 1 5          # Buy 5 complete sets for $5
-@bot sell 1 0 3 0.60         # Sell 3 "Yes" shares at $0.60
-@bot buy 1 1 2 0.35          # Buy 2 "No" shares at $0.35
+@bot bundle-buy LECTURE 5          # Buy 5 complete sets for $5
+@bot sell LECTURE 8 3 0.60         # Sell 3 lecture 8 shares at $0.60
+@bot buy LECTURE 15 2 0.35         # Buy 2 lecture 15 shares at $0.35
 
 # Check status privately  
-@bot balance                 # See your money
-@bot positions 1             # See your holdings
-@bot orders 1                # See pending orders
+@bot balance                       # See your money
+@bot positions LECTURE            # See your holdings
+@bot orders LECTURE               # See pending orders
 
 # Cancel an order
-@bot cancel 1 0 123          # Cancel order ID 123
+@bot cancel LECTURE 8 123         # Cancel order ID 123
 
 # View market
-@bot market 1                # See current prices and order book
+@bot market LECTURE               # See current prices and order book
 ```
 
 ## Recent Updates

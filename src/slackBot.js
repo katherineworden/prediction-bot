@@ -667,35 +667,37 @@ class SlackBot {
     const isAdmin = this.isAdmin(userId);
     let helpText = `
 *Prediction Market Commands:*
+The main market is **LECTURE** with outcomes 1-18 (lectures 1-15 + guest lectures 16-18)
+
 • \`@bot buy <market_id> <outcome_id> <quantity> [price]\` - Buy shares of an outcome
-  Example: \`@bot buy ELECTION2024 0 10 0.45\` - Buy 10 shares of outcome 0 at $0.45 each
-  Example: \`@bot buy ELECTION2024 0 5\` - Buy 5 shares at current market price
+  Example: \`@bot buy LECTURE 8 10 0.45\` - Buy 10 shares of lecture 8 at $0.45 each
+  Example: \`@bot buy LECTURE 15 5\` - Buy 5 shares at current market price
 
 • \`@bot sell <market_id> <outcome_id> <quantity> [price]\` - Sell shares of an outcome
-  Example: \`@bot sell ELECTION2024 1 5 0.65\` - Sell 5 shares of outcome 1 at $0.65 each
-  Example: \`@bot sell ELECTION2024 1 10\` - Sell 10 shares at current market price
+  Example: \`@bot sell LECTURE 12 5 0.65\` - Sell 5 shares of lecture 12 at $0.65 each
+  Example: \`@bot sell LECTURE 3 10\` - Sell 10 shares at current market price
 
 • \`@bot bundle-buy <market_id> <quantity>\` - Buy complete sets of all outcomes ($1 each)
-  Example: \`@bot bundle-buy ELECTION2024 10\` - Buy 10 complete sets (10 shares of each outcome)
+  Example: \`@bot bundle-buy LECTURE 10\` - Buy 10 complete sets (10 shares of each lecture)
 
 • \`@bot bundle-sell <market_id> <quantity>\` - Sell complete sets of all outcomes
-  Example: \`@bot bundle-sell ELECTION2024 5\` - Sell 5 complete sets (5 shares of each outcome)
+  Example: \`@bot bundle-sell LECTURE 5\` - Sell 5 complete sets (5 shares of each lecture)
 
 • \`@bot market <market_id>\` - Show market order book
-  Example: \`@bot market ELECTION2024\` - Show the order book for ELECTION2024
+  Example: \`@bot market LECTURE\` - Show the order book for LECTURE
 
 • \`@bot balance\` - Show your current balance
-  Note: This info is also available via DM for privacy
+  Note: Available via DM to reduce channel spam
 
 • \`@bot position <market_id>\` - Show your positions in a market
-  Example: \`@bot position ELECTION2024\` - Show your positions in ELECTION2024
-  Note: This info is also available via DM for privacy
+  Example: \`@bot position LECTURE\` - Show your positions in LECTURE
+  Note: Available via DM to reduce channel spam
 
 • \`@bot orders <market_id>\` - Show your open orders in a market
-  Example: \`@bot orders ELECTION2024\` - Show your pending orders in ELECTION2024
+  Example: \`@bot orders LECTURE\` - Show your pending orders in LECTURE
 
 • \`@bot cancel <market_id> <outcome_id> <order_id>\` - Cancel an open order
-  Example: \`@bot cancel ELECTION2024 0 123\` - Cancel order ID 123 for outcome 0
+  Example: \`@bot cancel LECTURE 8 123\` - Cancel order ID 123 for lecture 8
   Note: This returns your escrowed funds/shares
 
 • \`@bot help\` - Show this help message`;
@@ -705,12 +707,11 @@ class SlackBot {
 
 *Admin Commands:*
 • \`@bot create <market_id> "<outcome1,outcome2,...>" "<description>"\` - Create a new market
-  Example: \`@bot create ELECTION2024 "Trump,Biden,Harris" "Who will win the 2024 election?"\`
-  Example: \`@bot create POSTS "0-3,4-6,7-9,10+" "Number of posts tomorrow"\`
+  Example: \`@bot create LECTURE "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18" "Which lecture will be most relevant?"\`
   Note: Always use quotes around outcomes and description, especially if they contain spaces or commas
 
 • \`@bot resolve <market_id> <winning_outcome_id>\` - Resolve a market
-  Example: \`@bot resolve ELECTION2024 0\` - Resolve ELECTION2024 with outcome 0 as winner
+  Example: \`@bot resolve LECTURE 8\` - Resolve LECTURE with lecture 8 as winner
   
 • \`@bot export-data\` - Export current market data for backup
   This command shows a summary of markets and provides the complete JSON data that can be saved to

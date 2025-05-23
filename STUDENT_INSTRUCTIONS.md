@@ -6,6 +6,14 @@
 ## What is this bot?
 This bot lets you participate in prediction markets right in Slack. You can bet on outcomes of questions, trade with classmates, and see how good you are at predicting the future!
 
+## About the LECTURE Market
+The main market is called **LECTURE** and has 18 possible outcomes:
+- **Outcomes 1-15**: Regular course lectures 
+- **Outcomes 16-18**: Guest lectures
+- Outcomes are numbered as they appear on Ed (the course discussion board)
+
+You're betting on which lecture will be most relevant/useful for various purposes!
+
 ## Getting Started
 - You start with **1000 points** when you first use the bot
 - Tag the bot (@bot) to run commands
@@ -30,18 +38,18 @@ This bot lets you participate in prediction markets right in Slack. You can bet 
 
 **Examples:**
 ```
-@bot buy 1 1 10 0.45   - Buy 10 shares of outcome 1 at $0.45 each
-@bot sell 2 2 5 0.60   - Sell 5 shares of outcome 2 at $0.60 each
-@bot bundle-buy 1 3    - Buy 3 complete sets (private confirmation)
-@bot cancel 1 1 123    - Cancel order ID 123
+@bot buy LECTURE 5 10 0.45   - Buy 10 shares of lecture 5 at $0.45 each
+@bot sell LECTURE 12 5 0.60  - Sell 5 shares of lecture 12 at $0.60 each
+@bot bundle-buy LECTURE 3    - Buy 3 complete sets (private confirmation)
+@bot cancel LECTURE 5 123    - Cancel order ID 123
 ```
 
 ### Check Your Status
 ```
-@bot balance     - See how many points you have (private - only you see this)
-@bot positions   - See all your current holdings (private - only you see this)
-@bot orders [market_id] - View your open orders (private - only you see this)
-@bot help        - Show all commands
+@bot balance          - See how many points you have (private - only you see this)
+@bot positions LECTURE - See all your current holdings (private - only you see this)
+@bot orders LECTURE   - View your open orders (private - only you see this)
+@bot help             - Show all commands
 ```
 
 **Privacy note:** Balance, positions, and orders are automatically shown privately to you only - no one else in the channel can see your financial information!
@@ -61,10 +69,12 @@ This bot lets you participate in prediction markets right in Slack. You can bet 
 - **Market information** - Current prices and order books
 - **Market creation** - New markets being created
 
-### 💬 Also Available in DMs
+### 💬 Also Available in DMs (to reduce channel spam)
 You can also DM the bot directly for:
 - `balance` - Check your money privately
-- `positions` - Check your holdings privately  
+- `positions LECTURE` - Check your holdings privately  
+- `bundle-buy LECTURE 5` - Buy bundles privately
+- `bundle-sell LECTURE 2` - Sell bundles privately
 - `help` - Get help privately
 
 ## How Markets Work
@@ -94,31 +104,31 @@ You can also DM the bot directly for:
 
 2. **Check market details:**
    ```
-   @bot market 1
+   @bot market LECTURE
    ```
 
 3. **Buy some shares:**
    ```
-   @bot buy 1 1 20 0.55
+   @bot buy LECTURE 8 20 0.55
    ```
-   (Buy 20 shares of outcome 1 at $0.55 each - public confirmation, you get Order ID)
+   (Buy 20 shares of lecture 8 at $0.55 each - public confirmation, you get Order ID)
 
 4. **Check your position privately:**
    ```
-   @bot positions 1
+   @bot positions LECTURE
    ```
    (Only you see your holdings)
 
 5. **Check your orders privately:**
    ```
-   @bot orders 1
+   @bot orders LECTURE
    ```
    (Only you see your pending orders)
 
 6. **Cancel or sell if price moves:**
    ```
-   @bot cancel 1 1 123    # Cancel order ID 123
-   @bot sell 1 1 10 0.65  # Or sell at higher price
+   @bot cancel LECTURE 8 123    # Cancel order ID 123
+   @bot sell LECTURE 8 10 0.65  # Or sell at higher price
    ```
 
 ## Understanding the Numbers
@@ -149,10 +159,10 @@ A: Staff will resolve markets at the end of the quarter when the real outcome is
 A: Yes! You can cancel open orders that haven't been filled yet using `@bot cancel [market_id] [outcome_id] [order_id]`. This returns your escrowed money or shares. However, once an order is executed (matched with another trader), that transaction is final.
 
 **Q: How do I see my trading history?**
-A: Use `@bot positions` to see current holdings and `@bot orders [market_id]` to see pending orders. Full history isn't shown but you can track your balance changes.
+A: Use `@bot positions LECTURE` to see current holdings and `@bot orders LECTURE` to see pending orders. Full history isn't shown but you can track your balance changes.
 
 **Q: How do I find my Order ID to cancel?**
-A: When you place a buy or sell order, you'll get a confirmation message with the Order ID. You can also use `@bot orders [market_id]` to see all your open orders with their IDs.
+A: When you place a buy or sell order, you'll get a confirmation message with the Order ID. You can also use `@bot orders LECTURE` to see all your open orders with their IDs.
 
 **Q: What happens if I run out of points?**
 A: You can still participate in markets that resolve in your favor, but you won't be able to make new trades until your balance increases.
