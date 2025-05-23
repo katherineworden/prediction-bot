@@ -234,14 +234,6 @@ Students learn by:
 
 MIT License - see LICENSE file for details
 
-## Support
-
-For issues or questions:
-- Check the troubleshooting section
-- Review Slack app configuration
-- Check Railway deployment logs
-- Verify environment variables
-
 ---
 
 *Built by Katherine Worden for educational purposes to demonstrate prediction markets and automated market makers.*

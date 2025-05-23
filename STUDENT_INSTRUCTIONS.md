@@ -7,12 +7,13 @@
 This bot lets you participate in prediction markets right in Slack. You can bet on outcomes of questions, trade with classmates, and see how good you are at predicting the future!
 
 ## About the LECTURE Market
-The main market is called **LECTURE** and has 18 possible outcomes:
+The only market is called **LECTURE** and has 18 possible outcomes. You are betting on the most popular lecture.
+
+**How this market resolves:** This market will resolve in favor of whichever lecture receives the most student votes on the poll "Which lecture was your favorite this quarter?"
+
 - **Outcomes 1-15**: Regular course lectures 
 - **Outcomes 16-18**: Guest lectures
 - Outcomes are numbered as they appear on Ed (the course discussion board)
-
-You're betting on which lecture will be most relevant/useful for various purposes!
 
 ## Getting Started
 - You start with **1000 points** when you first use the bot
