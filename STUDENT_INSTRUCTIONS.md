@@ -13,7 +13,7 @@ The only market is called **LECTURE** and has 18 possible outcomes. You are bett
 
 - **Outcomes 1-15**: Regular course lectures 
 - **Outcomes 16-18**: Guest lectures
-- Outcomes are numbered as they appear on Ed (the course discussion board)
+- Outcomes are numbered starting from 1 (not 0) as they appear on Ed (the course discussion board)
 
 ## Getting Started
 - You start with **1000 points** when you first use the bot

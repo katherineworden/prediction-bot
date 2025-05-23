@@ -60,8 +60,8 @@ See [STUDENT_INSTRUCTIONS.md](STUDENT_INSTRUCTIONS.md) for complete usage guide.
 - `@bot create market "Question?" "Option1" "Option2"` - Create market (admin only)
 - `@bot list markets` - Show all active markets
 - `@bot market [market_id]` - Show market details
-- `@bot buy [market_id] [outcome_id] [shares] [price]` - Buy shares
-- `@bot sell [market_id] [outcome_id] [shares] [price]` - Sell shares
+- `@bot buy [market_id] [outcome_id] [shares] [price]` - Buy shares (outcome_id starts from 1)
+- `@bot sell [market_id] [outcome_id] [shares] [price]` - Sell shares (outcome_id starts from 1)
 - `@bot help` - Show help message
 
 ### Private Commands (shown only to you)
@@ -70,10 +70,10 @@ See [STUDENT_INSTRUCTIONS.md](STUDENT_INSTRUCTIONS.md) for complete usage guide.
 - `@bot orders [market_id]` - View your open orders
 - `@bot bundle-buy [market_id] [quantity]` - Buy complete sets
 - `@bot bundle-sell [market_id] [quantity]` - Sell complete sets
-- `@bot cancel [market_id] [outcome_id] [order_id]` - Cancel order
+- `@bot cancel [market_id] [outcome_id] [order_id]` - Cancel order (outcome_id starts from 1)
 
 ### Admin Commands
-- `@bot resolve [market_id] [outcome_id]` - Resolve market
+- `@bot resolve [market_id] [outcome_id]` - Resolve market (outcome_id starts from 1)
 - `@bot export-data` - Export market data
 - `@bot update market [market_id] [field] [value]` - Update market data
 
@@ -82,6 +82,7 @@ See [STUDENT_INSTRUCTIONS.md](STUDENT_INSTRUCTIONS.md) for complete usage guide.
 ### Market Mechanics
 - Users start with $1000 when they first interact with the bot
 - Prices represent probabilities and must be between $0.01-$0.99
+- Outcome IDs start from 1 (not 0) - first outcome is 1, second is 2, etc.
 - Orders are held in escrow until executed or cancelled
 - Bundle trading keeps prices efficient (outcomes sum to ~$1)
 - Winning shares pay $1 when markets resolve
@@ -180,8 +181,8 @@ Students learn by:
 
 # Students trade
 @bot bundle-buy ELECTION2024 5          # Buy 5 complete sets for $5
-@bot sell ELECTION2024 0 3 0.60         # Sell 3 "Trump" shares at $0.60
-@bot buy ELECTION2024 1 2 0.35          # Buy 2 "Biden" shares at $0.35
+@bot sell ELECTION2024 1 3 0.60         # Sell 3 "Trump" shares at $0.60
+@bot buy ELECTION2024 2 2 0.35          # Buy 2 "Biden" shares at $0.35
 
 # Check status privately  
 @bot balance                            # See your money
@@ -189,7 +190,7 @@ Students learn by:
 @bot orders ELECTION2024               # See pending orders
 
 # Cancel an order
-@bot cancel ELECTION2024 0 123         # Cancel order ID 123
+@bot cancel ELECTION2024 1 123         # Cancel order ID 123
 
 # View market
 @bot market ELECTION2024               # See current prices and order book

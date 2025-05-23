@@ -259,7 +259,7 @@ class SlackBot {
       return;
     }
     
-    const marketId = args[1];
+    const marketId = args[1]?.toUpperCase();
     const outcomesStr = args[2];
     const description = args[3];
     
@@ -270,12 +270,12 @@ class SlackBot {
     
     try {
       const outcomeNames = outcomesStr.split(',').map(o => o.trim());
-      const outcomes = outcomeNames.map((name, index) => ({ id: index.toString(), name }));
+      const outcomes = outcomeNames.map((name, index) => ({ id: (index + 1).toString(), name }));
       
       const market = this.marketManager.createMarket(marketId, description, outcomes);
       
       // Format outcomes with IDs
-      const outcomesWithIds = outcomeNames.map((name, index) => `${index} (${name})`).join(', ');
+      const outcomesWithIds = outcomeNames.map((name, index) => `${index + 1} (${name})`).join(', ');
       await this.sendMessage(channel, `Market created: ${marketId} - ${description}\nOutcomes (ID - Name): ${outcomesWithIds}`, thread_ts);
     } catch (error) {
       await this.sendMessage(channel, `Error creating market: ${error.message}`, thread_ts);
@@ -292,7 +292,7 @@ class SlackBot {
       args.push(match[1] || match[2]);
     }
     
-    const marketId = args[0];
+    const marketId = args[0]?.toUpperCase();
     const outcomeId = args[1];
     const quantity = parseInt(args[2]);
     const priceStr = args[3];
@@ -347,7 +347,7 @@ class SlackBot {
       args.push(match[1] || match[2]);
     }
     
-    const marketId = args[0];
+    const marketId = args[0]?.toUpperCase();
     const outcomeId = args[1];
     const quantity = parseInt(args[2]);
     const priceStr = args[3];
@@ -420,7 +420,7 @@ class SlackBot {
       args.push(match[1] || match[2]);
     }
     
-    const marketId = args[0];
+    const marketId = args[0]?.toUpperCase();
     
     if (!marketId) {
       await this.sendMessage(channel, 'Usage: @bot market <market_id>', thread_ts);
@@ -469,7 +469,7 @@ class SlackBot {
       args.push(match[1] || match[2]);
     }
     
-    const marketId = args[0];
+    const marketId = args[0]?.toUpperCase();
     
     if (!marketId) {
       await this.sendMessage(channel, 'Usage: @bot position <market_id>', thread_ts);
@@ -509,7 +509,7 @@ class SlackBot {
       args.push(match[1] || match[2]);
     }
     
-    const marketId = args[0];
+    const marketId = args[0]?.toUpperCase();
     const quantity = parseInt(args[1]);
     
     if (!marketId || !quantity) {
@@ -566,7 +566,7 @@ class SlackBot {
       args.push(match[1] || match[2]);
     }
     
-    const marketId = args[0];
+    const marketId = args[0]?.toUpperCase();
     const quantity = parseInt(args[1]);
     
     if (!marketId || !quantity) {
@@ -623,7 +623,7 @@ class SlackBot {
       args.push(match[1] || match[2]);
     }
     
-    const marketId = args[0];
+    const marketId = args[0]?.toUpperCase();
     const outcomeId = args[1];
     
     if (!marketId || !outcomeId) {
@@ -690,7 +690,7 @@ class SlackBot {
 
   async handleCancel(channel, userId, argsText, thread_ts) {
     const args = argsText.trim().split(/\s+/);
-    const marketId = args[0];
+    const marketId = args[0]?.toUpperCase();
     const outcomeId = args[1]; 
     const orderId = parseInt(args[2]);
     
@@ -713,7 +713,7 @@ class SlackBot {
 
   async handleOrders(channel, userId, argsText, thread_ts) {
     const args = argsText.trim().split(/\s+/);
-    const marketId = args[0];
+    const marketId = args[0]?.toUpperCase();
     
     if (!marketId) {
       await this.sendMessage(channel, 'Usage: @bot orders <market_id>', thread_ts);
