@@ -1,0 +1,38 @@
+{
+  "name": "slackbot-prediction-market",
+  "version": "2.0.0",
+  "description": "A Slack bot that enables prediction market trading within Slack workspaces for educational purposes",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node index.js",
+    "test": "node test.js"
+  },
+  "keywords": [
+    "slack",
+    "bot",
+    "prediction-market",
+    "trading",
+    "education",
+    "economics",
+    "market-maker"
+  ],
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/katherineworden/prediction-bot.git"
+  },
+  "bugs": {
+    "url": "https://github.com/katherineworden/prediction-bot/issues"
+  },
+  "homepage": "https://github.com/katherineworden/prediction-bot#readme",
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "dependencies": {
+    "@slack/events-api": "^3.0.1",
+    "@slack/web-api": "^7.9.1",
+    "dotenv": "^16.5.0"
+  }
+}
