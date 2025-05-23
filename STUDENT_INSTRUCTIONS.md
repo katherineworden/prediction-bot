@@ -176,3 +176,6 @@ A: You can still participate in markets that resolve in your favor, but you won'
 ---
 
 **Have fun predicting the future! 🔮📈**
+
+---
+*Created by Katherine Worden*

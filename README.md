@@ -176,23 +176,23 @@ Students learn by:
 
 ```bash
 # Create a market (admin only)
-@bot create market "LECTURE" "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18" "Which lecture will be most relevant?"
+@bot create market "ELECTION2024" "Trump,Biden,Harris" "Who will win the 2024 election?"
 
 # Students trade
-@bot bundle-buy LECTURE 5          # Buy 5 complete sets for $5
-@bot sell LECTURE 8 3 0.60         # Sell 3 lecture 8 shares at $0.60
-@bot buy LECTURE 15 2 0.35         # Buy 2 lecture 15 shares at $0.35
+@bot bundle-buy ELECTION2024 5          # Buy 5 complete sets for $5
+@bot sell ELECTION2024 0 3 0.60         # Sell 3 "Trump" shares at $0.60
+@bot buy ELECTION2024 1 2 0.35          # Buy 2 "Biden" shares at $0.35
 
 # Check status privately  
-@bot balance                       # See your money
-@bot positions LECTURE            # See your holdings
-@bot orders LECTURE               # See pending orders
+@bot balance                            # See your money
+@bot positions ELECTION2024            # See your holdings
+@bot orders ELECTION2024               # See pending orders
 
 # Cancel an order
-@bot cancel LECTURE 8 123         # Cancel order ID 123
+@bot cancel ELECTION2024 0 123         # Cancel order ID 123
 
 # View market
-@bot market LECTURE               # See current prices and order book
+@bot market ELECTION2024               # See current prices and order book
 ```
 
 ## Recent Updates
@@ -244,4 +244,4 @@ For issues or questions:
 
 ---
 
-*Built for educational purposes to demonstrate prediction markets and automated market makers.*
+*Built by Katherine Worden for educational purposes to demonstrate prediction markets and automated market makers.*
