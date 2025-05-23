@@ -1,5 +1,8 @@
 # Slack Prediction Market Bot
 
+> **⚠️ BETA SOFTWARE NOTICE**  
+> This bot is currently in beta and has undergone limited testing with course staff. While functional, you may encounter bugs or unexpected behavior. Please be patient as issues are identified and resolved. We encourage you to report any bugs or problems you discover to help improve the system.
+
 A Slack bot that enables prediction market trading within Slack workspaces. Students can trade on outcomes of questions, creating an interactive way to learn about market mechanisms and probability.
 
 ## Features

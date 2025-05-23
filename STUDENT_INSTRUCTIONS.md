@@ -1,5 +1,8 @@
 # Slack Prediction Market Bot - How to Use
 
+> **⚠️ BETA VERSION - PLEASE READ**  
+> This prediction market bot is in beta testing and has only been informally tested among course staff. You may encounter bugs, glitches, or unexpected behavior during use. Please be patient as we work through any issues that arise. If you find bugs or unexpected behavior, that's actually helpful! Please report them in the #help channel - you're helping make the system better for everyone.
+
 ## What is this bot?
 This bot lets you participate in prediction markets right in Slack. You can bet on outcomes of questions, trade with classmates, and see how good you are at predicting the future!
 
