@@ -18,27 +18,51 @@ This bot lets you participate in prediction markets right in Slack. You can bet 
 
 ### Trading
 ```
-@bot buy [market_id] [outcome_id] [shares]     - Buy shares in an outcome
-@bot sell [market_id] [outcome_id] [shares]    - Sell shares you own
-@bot bundle-buy [market_id] [shares]           - Buy 1 share of each outcome
-@bot bundle-sell [market_id] [shares]          - Sell 1 share of each outcome
+@bot buy [market_id] [outcome_id] [shares] [price]  - Buy shares in an outcome
+@bot sell [market_id] [outcome_id] [shares] [price] - Sell shares you own
+@bot bundle-buy [market_id] [shares]                - Buy 1 share of each outcome (private)
+@bot bundle-sell [market_id] [shares]               - Sell 1 share of each outcome (private)
+@bot cancel [market_id] [outcome_id] [order_id]     - Cancel an open order
 ```
 
 **Examples:**
 ```
-@bot buy 1 1 10        - Buy 10 shares of outcome 1 in market 1
-@bot sell 2 2 5        - Sell 5 shares of outcome 2 in market 2
-@bot bundle-buy 1 3    - Buy 3 shares each of all outcomes in market 1
+@bot buy 1 1 10 0.45   - Buy 10 shares of outcome 1 at $0.45 each
+@bot sell 2 2 5 0.60   - Sell 5 shares of outcome 2 at $0.60 each
+@bot bundle-buy 1 3    - Buy 3 complete sets (private confirmation)
+@bot cancel 1 1 123    - Cancel order ID 123
 ```
 
 ### Check Your Status
 ```
-@bot balance     - See how many points you have (recommended: DM the bot)
-@bot positions   - See all your current holdings (recommended: DM the bot)
+@bot balance     - See how many points you have (private - only you see this)
+@bot positions   - See all your current holdings (private - only you see this)
+@bot orders [market_id] - View your open orders (private - only you see this)
 @bot help        - Show all commands
 ```
 
-**Privacy tip:** For `balance` and `positions` commands, we recommend DMing the bot directly instead of using @mentions in the channel to keep your financial info private!
+**Privacy note:** Balance, positions, and orders are automatically shown privately to you only - no one else in the channel can see your financial information!
+
+## Privacy: What's Public vs Private
+
+### 🔒 Private (Only You See)
+- **Your balance** - How much money you have
+- **Your positions** - What shares you own
+- **Your open orders** - Your pending buy/sell orders
+- **Bundle operations** - Your bundle buy/sell confirmations
+- **Error messages** - When something goes wrong
+
+### 🌐 Public (Everyone Sees)
+- **Buy/sell confirmations** - When you place an order (with Order ID)
+- **Transaction matches** - When orders execute between traders
+- **Market information** - Current prices and order books
+- **Market creation** - New markets being created
+
+### 💬 Also Available in DMs
+You can also DM the bot directly for:
+- `balance` - Check your money privately
+- `positions` - Check your holdings privately  
+- `help` - Get help privately
 
 ## How Markets Work
 
@@ -72,20 +96,27 @@ This bot lets you participate in prediction markets right in Slack. You can bet 
 
 3. **Buy some shares:**
    ```
-   @bot buy 1 1 20
+   @bot buy 1 1 20 0.55
    ```
-   (Buy 20 shares of outcome 1 in market 1)
+   (Buy 20 shares of outcome 1 at $0.55 each - public confirmation, you get Order ID)
 
-4. **Check your position:**
+4. **Check your position privately:**
    ```
-   @bot positions
+   @bot positions 1
    ```
+   (Only you see your holdings)
 
-5. **Sell if price goes up:**
+5. **Check your orders privately:**
    ```
-   @bot sell 1 1 10
+   @bot orders 1
    ```
-   (Sell 10 shares for profit)
+   (Only you see your pending orders)
+
+6. **Cancel or sell if price moves:**
+   ```
+   @bot cancel 1 1 123    # Cancel order ID 123
+   @bot sell 1 1 10 0.65  # Or sell at higher price
+   ```
 
 ## Understanding the Numbers
 
