@@ -1,0 +1,41 @@
+{
+  "markets": {
+    "LECTURE": {
+      "id": "LECTURE",
+      "description": "Will the lecture run over time?",
+      "outcomes": {
+        "YES": {
+          "id": "YES",
+          "name": "Yes"
+        },
+        "NO": {
+          "id": "NO",
+          "name": "No"
+        }
+      },
+      "resolved": false,
+      "winningOutcome": null,
+      "createdBy": "admin",
+      "createdAt": "2025-05-23T22:00:17.013Z"
+    }
+  },
+  "userBalances": {},
+  "userPositions": {},
+  "orderBooks": {
+    "LECTURE": {
+      "YES": {
+        "bids": [],
+        "asks": [],
+        "lastPrice": null,
+        "volume": 0
+      },
+      "NO": {
+        "bids": [],
+        "asks": [],
+        "lastPrice": null,
+        "volume": 0
+      }
+    }
+  },
+  "userOrders": {}
+}

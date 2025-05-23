@@ -422,12 +422,19 @@ class SlackBot {
       return;
     }
     
-    const blocks = this.formatOrderBook(info);
-    await this.web.chat.postMessage({
-      channel,
-      blocks,
-      thread_ts
-    });
+    try {
+      const blocks = this.formatOrderBook(info);
+      await this.web.chat.postMessage({
+        channel,
+        blocks,
+        thread_ts
+      });
+    } catch (error) {
+      console.error('Error sending blocks:', error);
+      // Fallback to simple text message
+      const fallbackText = this.formatOrderBookText(info);
+      await this.sendMessage(channel, fallbackText, thread_ts);
+    }
   }
 
   async handleBalance(channel, userId, thread_ts) {
@@ -502,21 +509,39 @@ class SlackBot {
     try {
       const result = this.marketManager.buyBundle(userId, marketId, quantity);
       
-      // Send a private confirmation to the user
-      await this.web.chat.postEphemeral({
-        channel,
-        user: userId,
-        text: `You bought ${result.bundlesBought} bundles for $${result.cost.toFixed(2)}`,
-        thread_ts
-      });
+      // Check if we're in a DM or channel
+      const channelInfo = await this.web.conversations.info({ channel }).catch(() => null);
+      const isDM = channelInfo?.channel?.is_im || channel.startsWith('D');
+      
+      if (isDM) {
+        // In DM, send regular message
+        await this.sendMessage(channel, `You bought ${result.bundlesBought} bundles for $${result.cost.toFixed(2)}`, thread_ts);
+      } else {
+        // In channel, send confirmation and guide to DM
+        await this.sendMessage(channel, `✅ Bundle purchase successful! For privacy, please use bundle commands in DM.`, thread_ts);
+        // Send details privately
+        await this.web.chat.postEphemeral({
+          channel,
+          user: userId,
+          text: `You bought ${result.bundlesBought} bundles for $${result.cost.toFixed(2)}`,
+          thread_ts
+        });
+      }
     } catch (error) {
-      // Send errors privately
-      await this.web.chat.postEphemeral({
-        channel,
-        user: userId,
-        text: `Error: ${error.message}`,
-        thread_ts
-      });
+      // Send errors privately in channels, directly in DMs
+      const channelInfo = await this.web.conversations.info({ channel }).catch(() => null);
+      const isDM = channelInfo?.channel?.is_im || channel.startsWith('D');
+      
+      if (isDM) {
+        await this.sendMessage(channel, `Error: ${error.message}`, thread_ts);
+      } else {
+        await this.web.chat.postEphemeral({
+          channel,
+          user: userId,
+          text: `Error: ${error.message}`,
+          thread_ts
+        });
+      }
     }
   }
 
@@ -541,21 +566,39 @@ class SlackBot {
     try {
       const result = this.marketManager.sellBundle(userId, marketId, quantity);
       
-      // Send a private confirmation to the user
-      await this.web.chat.postEphemeral({
-        channel,
-        user: userId,
-        text: `You sold ${result.bundlesSold} bundles for $${result.revenue.toFixed(2)}`,
-        thread_ts
-      });
+      // Check if we're in a DM or channel
+      const channelInfo = await this.web.conversations.info({ channel }).catch(() => null);
+      const isDM = channelInfo?.channel?.is_im || channel.startsWith('D');
+      
+      if (isDM) {
+        // In DM, send regular message
+        await this.sendMessage(channel, `You sold ${result.bundlesSold} bundles for $${result.revenue.toFixed(2)}`, thread_ts);
+      } else {
+        // In channel, send confirmation and guide to DM
+        await this.sendMessage(channel, `✅ Bundle sale successful! For privacy, please use bundle commands in DM.`, thread_ts);
+        // Send details privately
+        await this.web.chat.postEphemeral({
+          channel,
+          user: userId,
+          text: `You sold ${result.bundlesSold} bundles for $${result.revenue.toFixed(2)}`,
+          thread_ts
+        });
+      }
     } catch (error) {
-      // Send errors privately
-      await this.web.chat.postEphemeral({
-        channel,
-        user: userId,
-        text: `Error: ${error.message}`,
-        thread_ts
-      });
+      // Send errors privately in channels, directly in DMs
+      const channelInfo = await this.web.conversations.info({ channel }).catch(() => null);
+      const isDM = channelInfo?.channel?.is_im || channel.startsWith('D');
+      
+      if (isDM) {
+        await this.sendMessage(channel, `Error: ${error.message}`, thread_ts);
+      } else {
+        await this.web.chat.postEphemeral({
+          channel,
+          user: userId,
+          text: `Error: ${error.message}`,
+          thread_ts
+        });
+      }
     }
   }
 
@@ -763,8 +806,18 @@ Market: **LECTURE** (outcomes 1-18: lectures 1-15 + guest lectures 16-18)
       type: 'divider'
     });
     
+    // Limit outcomes to prevent exceeding 50 blocks
+    const maxOutcomes = 10; // Each outcome uses ~4 blocks
+    const outcomeEntries = Object.entries(info.outcomes);
+    const displayOutcomes = outcomeEntries.slice(0, maxOutcomes);
+    
     // Add each outcome's order book
-    for (const [outcomeId, outcome] of Object.entries(info.outcomes)) {
+    for (const [outcomeId, outcome] of displayOutcomes) {
+      // Limit orders shown per outcome
+      const maxOrdersPerSide = 5;
+      const limitedBids = outcome.bids.slice(0, maxOrdersPerSide);
+      const limitedAsks = outcome.asks.slice(0, maxOrdersPerSide);
+      
       blocks.push({
         type: 'section',
         text: {
@@ -773,19 +826,23 @@ Market: **LECTURE** (outcomes 1-18: lectures 1-15 + guest lectures 16-18)
         }
       });
       
-      const bidText = outcome.bids.map(b => `$${b.price} (${b.quantity})`).join('\n') || 'No bids';
-      const askText = outcome.asks.map(a => `$${a.price} (${a.quantity})`).join('\n') || 'No asks';
+      const bidText = limitedBids.map(b => `$${b.price} (${b.quantity})`).join('\n') || 'No bids';
+      const askText = limitedAsks.map(a => `$${a.price} (${a.quantity})`).join('\n') || 'No asks';
+      
+      // Add note if orders were truncated
+      const bidNote = outcome.bids.length > maxOrdersPerSide ? `\n_...and ${outcome.bids.length - maxOrdersPerSide} more_` : '';
+      const askNote = outcome.asks.length > maxOrdersPerSide ? `\n_...and ${outcome.asks.length - maxOrdersPerSide} more_` : '';
       
       blocks.push({
         type: 'section',
         fields: [
           {
             type: 'mrkdwn',
-            text: `*Bids:*\n${bidText}`
+            text: `*Bids:*\n${bidText}${bidNote}`
           },
           {
             type: 'mrkdwn',
-            text: `*Asks:*\n${askText}`
+            text: `*Asks:*\n${askText}${askNote}`
           },
           {
             type: 'mrkdwn',
@@ -801,7 +858,42 @@ Market: **LECTURE** (outcomes 1-18: lectures 1-15 + guest lectures 16-18)
       blocks.push({ type: 'divider' });
     }
     
+    // Add note if outcomes were truncated
+    if (outcomeEntries.length > maxOutcomes) {
+      blocks.push({
+        type: 'section',
+        text: {
+          type: 'mrkdwn',
+          text: `_...and ${outcomeEntries.length - maxOutcomes} more outcomes_`
+        }
+      });
+    }
+    
     return blocks;
+  }
+
+  formatOrderBookText(info) {
+    let text = `Market: ${info.description}\n`;
+    
+    if (info.resolved) {
+      text += `🏁 RESOLVED - Winning Outcome: ${info.winningOutcome}\n`;
+    } else {
+      text += `Sum of Best Bids: $${info.totalBestBids.toFixed(2)}\n`;
+      text += `Sum of Best Asks: $${info.totalBestAsks.toFixed(2)}\n`;
+    }
+    
+    text += '\n';
+    
+    for (const [outcomeId, outcome] of Object.entries(info.outcomes)) {
+      text += `${outcome.name} (ID: ${outcomeId})\n`;
+      const bidText = outcome.bids.map(b => `$${b.price} (${b.quantity})`).join(', ') || 'No bids';
+      const askText = outcome.asks.map(a => `$${a.price} (${a.quantity})`).join(', ') || 'No asks';
+      text += `  Bids: ${bidText}\n`;
+      text += `  Asks: ${askText}\n`;
+      text += `  Last: $${outcome.last || 'N/A'} | Volume: ${outcome.volume}\n\n`;
+    }
+    
+    return text;
   }
 
   async sendMessage(channel, text, thread_ts = null) {

@@ -517,8 +517,20 @@ class MarketManager {
     try {
       console.log(`Loading initial market data from: ${this.dataFile}`);
       
+      // Check if file exists
+      if (!fs.existsSync(this.dataFile)) {
+        console.log(`Data file doesn't exist, starting with fresh data`);
+        return;
+      }
+      
       const rawData = fs.readFileSync(this.dataFile, 'utf8');
       console.log(`Data file size: ${rawData.length} bytes`);
+      
+      // Handle empty file
+      if (!rawData.trim()) {
+        console.log(`Data file is empty, starting with fresh data`);
+        return;
+      }
       
       const data = JSON.parse(rawData);
       console.log(`Parsed JSON data successfully`);
