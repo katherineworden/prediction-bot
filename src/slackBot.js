@@ -71,6 +71,9 @@ class SlackBot {
         case 'market':
           await this.handleMarketInfo(channel, argsText, thread_ts);
           break;
+        case 'list':
+          await this.handleListMarkets(channel, thread_ts);
+          break;
         case 'balance':
           await this.handleBalance(channel, userId, thread_ts);
           break;
@@ -368,6 +371,24 @@ class SlackBot {
     } catch (error) {
       await this.sendMessage(channel, `Error: ${error.message}`, thread_ts);
     }
+  }
+
+  async handleListMarkets(channel, thread_ts) {
+    const markets = Array.from(this.marketManager.markets.keys());
+    
+    if (markets.length === 0) {
+      await this.sendMessage(channel, 'No markets found. Use `@bot create market` to create one.', thread_ts);
+      return;
+    }
+    
+    let marketsList = '*Available Markets:*\n';
+    for (const marketId of markets) {
+      const market = this.marketManager.getMarket(marketId);
+      const status = market.resolved ? '🏁 RESOLVED' : '📈 ACTIVE';
+      marketsList += `• **${marketId}** - ${market.description} (${status})\n`;
+    }
+    
+    await this.sendMessage(channel, marketsList, thread_ts);
   }
 
   async handleMarketInfo(channel, argsText, thread_ts) {
