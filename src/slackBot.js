@@ -152,7 +152,8 @@ class SlackBot {
       console.log('Position command detected in DM from user:', userId);
       try {
         // Handle position check in DM
-        const marketId = text.split(' ')[1];
+        const parts = text.split(' ');
+        const marketId = parts[1]?.toUpperCase(); // Normalize market ID to uppercase
         if (marketId) {
           // Initialize user if not already initialized
           this.marketManager.initializeUser(userId);
@@ -161,7 +162,7 @@ class SlackBot {
           const market = this.marketManager.getMarket(marketId);
           
           if (!market) {
-            await this.sendMessage(event.channel, 'Market not found', thread_ts);
+            await this.sendMessage(event.channel, `Market '${marketId}' not found. Use 'list' to see available markets.`, thread_ts);
             return;
           }
           
@@ -183,7 +184,7 @@ class SlackBot {
       console.log('Bundle-buy command detected in DM from user:', userId);
       try {
         const args = text.split(' ');
-        const marketId = args[1];
+        const marketId = args[1]?.toUpperCase(); // Normalize market ID to uppercase
         const quantity = parseInt(args[2]);
         
         if (!marketId || !quantity) {
@@ -201,7 +202,7 @@ class SlackBot {
       console.log('Bundle-sell command detected in DM from user:', userId);
       try {
         const args = text.split(' ');
-        const marketId = args[1];
+        const marketId = args[1]?.toUpperCase(); // Normalize market ID to uppercase
         const quantity = parseInt(args[2]);
         
         if (!marketId || !quantity) {
@@ -218,10 +219,20 @@ class SlackBot {
     } else if (text === 'help') {
       // Handle help command in DM
       await this.handleHelp(event.channel, userId, thread_ts);
+    } else if (text.startsWith('list')) {
+      // Handle list command in DM
+      await this.handleListMarkets(event.channel, thread_ts);
+    } else if (text.startsWith('orders ')) {
+      // Handle orders command in DM
+      const marketId = text.split(' ')[1]?.toUpperCase();
+      if (marketId) {
+        await this.handleOrders(event.channel, userId, marketId, thread_ts);
+      } else {
+        await this.sendMessage(event.channel, 'Usage: `orders <market_id>`', thread_ts);
+      }
     } else if ((text.startsWith('buy ') && /^buy \S+ \S+ \d+/.test(text)) || 
                (text.startsWith('sell ') && /^sell \S+ \S+ \d+/.test(text)) || 
                (text.startsWith('market ') && /^market \S+/.test(text)) || 
-               text.startsWith('bundle-buy ') || text.startsWith('bundle-sell ') || 
                (this.isAdmin(userId) && (text.startsWith('create ') || text.startsWith('resolve ')))) {
       // For other commands, tell users to use them in public channels with @mentions
       await this.sendMessage(event.channel, 'Please use this command in a channel by mentioning the bot: `@bot ' + text + '`', thread_ts);
@@ -518,7 +529,7 @@ class SlackBot {
         await this.sendMessage(channel, `You bought ${result.bundlesBought} bundles for $${result.cost.toFixed(2)}`, thread_ts);
       } else {
         // In channel, send confirmation and guide to DM
-        await this.sendMessage(channel, `✅ Bundle purchase successful! For privacy, please use bundle commands in DM.`, thread_ts);
+        await this.sendMessage(channel, `✅ Bundle purchase successful! Please use bundle commands in DM.`, thread_ts);
         // Send details privately
         await this.web.chat.postEphemeral({
           channel,
@@ -575,7 +586,7 @@ class SlackBot {
         await this.sendMessage(channel, `You sold ${result.bundlesSold} bundles for $${result.revenue.toFixed(2)}`, thread_ts);
       } else {
         // In channel, send confirmation and guide to DM
-        await this.sendMessage(channel, `✅ Bundle sale successful! For privacy, please use bundle commands in DM.`, thread_ts);
+        await this.sendMessage(channel, `✅ Bundle sale successful! Please use bundle commands in DM.`, thread_ts);
         // Send details privately
         await this.web.chat.postEphemeral({
           channel,
@@ -713,7 +724,12 @@ class SlackBot {
       const orders = this.marketManager.getUserOrders(userId, marketId);
       
       if (orders.length === 0) {
-        await this.sendMessage(channel, `You have no open orders in market ${marketId}`, thread_ts);
+        await this.web.chat.postEphemeral({
+          channel,
+          user: userId,
+          text: `You have no open orders in market ${marketId}\n\n_Please use orders command in DM to reduce spam in the channel._`,
+          thread_ts
+        });
         return;
       }
       
@@ -727,7 +743,7 @@ class SlackBot {
       await this.web.chat.postEphemeral({
         channel,
         user: userId,
-        text: orderText,
+        text: orderText + '\n_Please use orders command in DM to reduce spam in the channel._',
         thread_ts
       });
     } catch (error) {
