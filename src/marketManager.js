@@ -61,6 +61,7 @@ class MarketManager {
     this.initializeUser(userId);
     const market = this.getMarket(marketId);
     if (!market) throw new Error('Market not found');
+    if (market.resolved) throw new Error('Cannot trade on resolved market');
     
     const cost = this.bundlePrice * quantity;
     const balance = this.getUserBalance(userId);
@@ -92,6 +93,7 @@ class MarketManager {
     this.initializeUser(userId);
     const market = this.getMarket(marketId);
     if (!market) throw new Error('Market not found');
+    if (market.resolved) throw new Error('Cannot trade on resolved market');
     
     // Check if user has enough of each outcome
     const userPositions = this.userPositions.get(userId);
@@ -146,6 +148,7 @@ class MarketManager {
     this.initializeUser(userId);
     const market = this.getMarket(marketId);
     if (!market) throw new Error('Market not found');
+    if (market.resolved) throw new Error('Cannot trade on resolved market');
     
     const outcome = market.outcomes.get(outcomeId);
     if (!outcome) throw new Error('Outcome not found');
@@ -176,20 +179,21 @@ class MarketManager {
       
       // If everything was matched, there's no need to update the order
       if (remainingQuantity === 0) {
-        return { order: { price, quantity, side: 'buy', outcome: outcomeId }, matches };
+        return { order, matches };
       }
       
       // Update the order for the remaining quantity
       order.quantity = remainingQuantity;
     }
     
-    return { order: { price, quantity, side: 'buy', outcome: outcomeId }, matches };
+    return { order, matches };
   }
 
   placeSellOrder(userId, marketId, outcomeId, price, quantity) {
     this.initializeUser(userId);
     const market = this.getMarket(marketId);
     if (!market) throw new Error('Market not found');
+    if (market.resolved) throw new Error('Cannot trade on resolved market');
     
     const outcome = market.outcomes.get(outcomeId);
     if (!outcome) throw new Error('Outcome not found');
@@ -220,14 +224,14 @@ class MarketManager {
       
       // If everything was matched, there's no need to update anything
       if (remainingQuantity === 0) {
-        return { order: { price, quantity, side: 'sell', outcome: outcomeId }, matches };
+        return { order, matches };
       }
       
       // Update the order for the remaining quantity
       order.quantity = remainingQuantity;
     }
     
-    return { order: { price, quantity, side: 'sell', outcome: outcomeId }, matches };
+    return { order, matches };
   }
 
   marketBuy(userId, marketId, outcomeId, quantity) {
@@ -345,7 +349,9 @@ class MarketManager {
       outcomes,
       totalBestBids,
       totalBestAsks,
-      bundlePrice: this.bundlePrice
+      bundlePrice: this.bundlePrice,
+      resolved: market.resolved,
+      winningOutcome: market.winningOutcome
     };
   }
 

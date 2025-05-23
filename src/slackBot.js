@@ -170,11 +170,47 @@ class SlackBot {
           
           await this.sendMessage(event.channel, positionText, thread_ts);
         } else {
-          await this.sendMessage(event.channel, 'Please specify a market ID: `position <market_id>`', thread_ts);
+          await this.sendMessage(event.channel, 'Please specify a market ID: `positions <market_id>`', thread_ts);
         }
       } catch (error) {
         console.error('Error handling position command in DM:', error);
         await this.sendMessage(event.channel, `Error checking positions: ${error.message}`, thread_ts);
+      }
+    } else if (text.startsWith('bundle-buy ')) {
+      console.log('Bundle-buy command detected in DM from user:', userId);
+      try {
+        const args = text.split(' ');
+        const marketId = args[1];
+        const quantity = parseInt(args[2]);
+        
+        if (!marketId || !quantity) {
+          await this.sendMessage(event.channel, 'Usage: `bundle-buy <market_id> <quantity>`', thread_ts);
+          return;
+        }
+        
+        const result = this.marketManager.buyBundle(userId, marketId, quantity);
+        await this.sendMessage(event.channel, `You bought ${result.bundlesBought} bundles for $${result.cost.toFixed(2)}`, thread_ts);
+      } catch (error) {
+        console.error('Error handling bundle-buy command in DM:', error);
+        await this.sendMessage(event.channel, `Error: ${error.message}`, thread_ts);
+      }
+    } else if (text.startsWith('bundle-sell ')) {
+      console.log('Bundle-sell command detected in DM from user:', userId);
+      try {
+        const args = text.split(' ');
+        const marketId = args[1];
+        const quantity = parseInt(args[2]);
+        
+        if (!marketId || !quantity) {
+          await this.sendMessage(event.channel, 'Usage: `bundle-sell <market_id> <quantity>`', thread_ts);
+          return;
+        }
+        
+        const result = this.marketManager.sellBundle(userId, marketId, quantity);
+        await this.sendMessage(event.channel, `You sold ${result.bundlesSold} bundles for $${result.revenue.toFixed(2)}`, thread_ts);
+      } catch (error) {
+        console.error('Error handling bundle-sell command in DM:', error);
+        await this.sendMessage(event.channel, `Error: ${error.message}`, thread_ts);
       }
     } else if (text === 'help') {
       // Handle help command in DM
@@ -708,8 +744,20 @@ You can DM the bot directly for private commands:
           type: 'plain_text',
           text: `Market: ${info.description}`
         }
-      },
-      {
+      }
+    ];
+
+    // Add resolution status if market is resolved
+    if (info.resolved) {
+      blocks.push({
+        type: 'section',
+        text: {
+          type: 'mrkdwn',
+          text: `🏁 *RESOLVED* - Winning Outcome: ${info.winningOutcome}`
+        }
+      });
+    } else {
+      blocks.push({
         type: 'section',
         fields: [
           {
@@ -721,11 +769,12 @@ You can DM the bot directly for private commands:
             text: `*Sum of Best Asks:* $${info.totalBestAsks.toFixed(2)}`
           }
         ]
-      },
-      {
-        type: 'divider'
-      }
-    ];
+      });
+    }
+    
+    blocks.push({
+      type: 'divider'
+    });
     
     // Add each outcome's order book
     for (const [outcomeId, outcome] of Object.entries(info.outcomes)) {
