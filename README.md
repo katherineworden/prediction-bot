@@ -205,6 +205,9 @@ Students learn by:
 - ✅ **Enhanced Privacy**: Balance, positions, orders shown privately
 - ✅ **Bundle Privacy**: Bundle operations now completely private
 - ✅ **DM Support**: Balance and positions work in direct messages
+- ✅ **Case-Insensitive Markets**: Market IDs work regardless of case
+- ✅ **1-Based Indexing**: Outcomes numbered from 1, not 0
+- ✅ **Improved Error Messages**: Clear guidance when orders can't fill
 
 ## Troubleshooting
 

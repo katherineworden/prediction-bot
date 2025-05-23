@@ -98,6 +98,40 @@ Copy the order ID from previous buy/sell confirmations and use it here:
 @Prediction Market Bot sell LECTURE 15 8 0.70
 ```
 
+### 7. Case Sensitivity Tests
+Test that market IDs are case-insensitive:
+```
+@Prediction Market Bot market lecture
+```
+
+```
+@Prediction Market Bot positions Lecture
+```
+
+```
+@Prediction Market Bot buy LeCTuRe 5 2 0.40
+```
+
+### 8. Testing "positions" plural command
+Both should work:
+```
+@Prediction Market Bot position LECTURE
+```
+
+```
+@Prediction Market Bot positions LECTURE
+```
+
+### 9. Testing Market Orders with No Liquidity
+Should show helpful error about no matching orders:
+```
+@Prediction Market Bot buy LECTURE 1 10
+```
+
+```
+@Prediction Market Bot sell LECTURE 1 5
+```
+
 ```
 @Prediction Market Bot market LECTURE
 ```

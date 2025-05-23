@@ -25,7 +25,7 @@ The only market is called **LECTURE** and has 18 possible outcomes. You are bett
 ### Viewing Markets
 ```
 @bot list markets          - See all active markets
-@bot market [market_id]    - Get details about a specific market
+@bot market [market_id]    - Get details about a specific market (case-insensitive)
 ```
 
 ### Trading
@@ -37,6 +37,8 @@ The only market is called **LECTURE** and has 18 possible outcomes. You are bett
 @bot cancel [market_id] [outcome_id] [order_id]     - Cancel an open order
 ```
 
+**Note:** If you try to buy/sell without a price and see "Only 0 units could be filled", it means there are no matching orders. You need to place a limit order with a price instead.
+
 **Examples:**
 ```
 @bot buy LECTURE 5 10 0.45   - Buy 10 shares of lecture 5 at $0.45 each
@@ -47,10 +49,11 @@ The only market is called **LECTURE** and has 18 possible outcomes. You are bett
 
 ### Check Your Status
 ```
-@bot balance          - See how many points you have (private - only you see this)
-@bot positions LECTURE - See all your current holdings (private - only you see this)
-@bot orders LECTURE   - View your open orders (private - only you see this)
-@bot help             - Show all commands
+@bot balance              - See how many points you have (private - only you see this)
+@bot position LECTURE     - See all your current holdings (private - only you see this)
+@bot positions LECTURE    - Same as above (both work)
+@bot orders LECTURE       - View your open orders (private - only you see this)
+@bot help                 - Show all commands
 ```
 
 **Privacy note:** Balance, positions, and orders are automatically shown privately to you only - no one else in the channel can see your financial information!
@@ -141,6 +144,8 @@ When you see a market, prices show probability:
 - **$0.10** = 10% chance (very unlikely)
 
 All outcome prices in a market add up to $1.00.
+
+**Sum of Best Bids/Asks:** When viewing a market, you'll see these sums. In an efficient market, they should both be close to $1.00. If the sum is significantly below or above $1.00, there may be arbitrage opportunities through bundle trading!
 
 ## Common Questions
 
