@@ -242,7 +242,7 @@ class SlackBot {
     const description = args.slice(2).join(' ');
     
     if (!marketId || !outcomesStr || !description) {
-      await this.sendMessage(channel, 'Usage: @bot create <market_id> "outcome1,outcome2,..." "description"', thread_ts);
+      await this.sendMessage(channel, 'Usage: @bot create market <market_id> "outcome1,outcome2,..." "description"', thread_ts);
       return;
     }
     
@@ -706,8 +706,8 @@ The main market is **LECTURE** with outcomes 1-18 (lectures 1-15 + guest lecture
       helpText += `
 
 *Admin Commands:*
-• \`@bot create <market_id> "<outcome1,outcome2,...>" "<description>"\` - Create a new market
-  Example: \`@bot create LECTURE "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18" "Which lecture will be most relevant?"\`
+• \`@bot create market <market_id> "<outcome1,outcome2,...>" "<description>"\` - Create a new market
+  Example: \`@bot create market LECTURE "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18" "Which lecture will be most relevant?"\`
   Note: Always use quotes around outcomes and description, especially if they contain spaces or commas
 
 • \`@bot resolve <market_id> <winning_outcome_id>\` - Resolve a market
