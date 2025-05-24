@@ -76,8 +76,8 @@ The only market is called **LECTURE** and has 18 possible outcomes. You are bett
 You should DM the bot directly for:
 - `balance` - Check your money privately
 - `positions LECTURE` - Check your holdings privately
-- `bundle-buy LECTURE 5` - Buy bundles privately
-- `bundle-sell LECTURE 2` - Sell bundles privately
+- `bundle-buy LECTURE [SHARES]` - Buy bundles privately
+- `bundle-sell LECTURE [SHARES]` - Sell bundles privately
 - `orders LECTURE` - View your open orders privately
 - `help` - Get help privately
 
