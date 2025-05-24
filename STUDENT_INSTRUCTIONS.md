@@ -32,8 +32,8 @@ The only market is called **LECTURE** and has 18 possible outcomes. You are bett
 ```
 @bot buy [market_id] [outcome_id] [shares] [price]  - Buy shares in an outcome
 @bot sell [market_id] [outcome_id] [shares] [price] - Sell shares you own
-@bot bundle-buy [market_id] [shares]                - Buy 1 share of each outcome (private)
-@bot bundle-sell [market_id] [shares]               - Sell 1 share of each outcome (private)
+@bot bundle-buy [market_id] [shares]                - Buy 1 share of each outcome (please DM the bot this command to reduce channel spam)
+@bot bundle-sell [market_id] [shares]               - Sell 1 share of each outcome (please DM the bot this command to reduce channel spam)
 @bot cancel [market_id] [outcome_id] [order_id]     - Cancel an open order
 ```
 
@@ -49,14 +49,13 @@ The only market is called **LECTURE** and has 18 possible outcomes. You are bett
 
 ### Check Your Status
 ```
-@bot balance              - See how many points you have (private - only you see this)
-@bot position LECTURE     - See all your current holdings (private - only you see this)
-@bot positions LECTURE    - Same as above (both work)
-@bot orders LECTURE       - View your open orders (private - only you see this)
-@bot help                 - Show all commands
+@bot balance              - See how many points you have (please DM the bot this command to reduce channel spam)
+@bot position LECTURE     - See all your current holdings (please DM the bot this command to reduce channel spam)
+@bot positions LECTURE    - Same as above (both work) (please DM the bot this command to reduce channel spam)
+@bot orders LECTURE       - View your open orders (please DM the bot this command to reduce channel spam)
+@bot help                 - Show all commands (please DM the bot this command to reduce channel spam)
 ```
 
-**Privacy note:** Balance, positions, and orders are automatically shown privately to you only - no one else in the channel can see your financial information!
 
 ## Privacy: What's Public vs Private
 
@@ -74,12 +73,13 @@ The only market is called **LECTURE** and has 18 possible outcomes. You are bett
 - **Market creation** - New markets being created
 
 ### 💬 Also Available in DMs (to reduce channel spam)
-You can also DM the bot directly for:
-- `balance` - Check your money privately
-- `positions LECTURE` - Check your holdings privately  
-- `bundle-buy LECTURE 5` - Buy bundles privately
-- `bundle-sell LECTURE 2` - Sell bundles privately
-- `help` - Get help privately
+You should also DM the bot directly for:
+- `balance` - Check your money privately (please DM the bot this command to reduce channel spam)
+- `positions LECTURE` - Check your holdings privately (please DM the bot this command to reduce channel spam)
+- `bundle-buy LECTURE 5` - Buy bundles privately (please DM the bot this command to reduce channel spam)
+- `bundle-sell LECTURE 2` - Sell bundles privately (please DM the bot this command to reduce channel spam)
+- `orders LECTURE` - View your open orders privately (please DM the bot this command to reduce channel spam)
+- `help` - Get help privately (please DM the bot this command to reduce channel spam)
 
 ## How Markets Work
 
