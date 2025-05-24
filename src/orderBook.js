@@ -38,6 +38,7 @@ class OrderBook {
           buyer: topBid.userId,
           seller: topAsk.userId,
           price: matchPrice,
+          buyerPrice: topBid.price,  // Store buyer's limit price for refund calculation
           quantity: matchQuantity,
           timestamp: Date.now()
         });

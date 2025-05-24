@@ -296,7 +296,7 @@ class MarketManager {
 
   processMatches(matches, marketId, outcomeId) {
     for (const match of matches) {
-      // Update buyer position and balance
+      // Update buyer position
       const buyerPositions = this.userPositions.get(match.buyer);
       let buyerMarketPositions = buyerPositions.get(marketId);
       if (!buyerMarketPositions) {
@@ -306,16 +306,16 @@ class MarketManager {
       const currentBuyerPosition = buyerMarketPositions.get(outcomeId) || 0;
       buyerMarketPositions.set(outcomeId, currentBuyerPosition + match.quantity);
       
-      // Update seller position and balance
-      const sellerPositions = this.userPositions.get(match.seller);
-      let sellerMarketPositions = sellerPositions.get(marketId);
-      if (!sellerMarketPositions) {
-        sellerMarketPositions = new Map();
-        sellerPositions.set(marketId, sellerMarketPositions);
+      // Refund buyer if they got a better price than their limit
+      // The buyer paid match.buyerPrice * match.quantity upfront
+      // But only needs to pay match.price * match.quantity
+      if (match.buyerPrice && match.buyerPrice > match.price) {
+        const refund = (match.buyerPrice - match.price) * match.quantity;
+        const buyerBalance = this.getUserBalance(match.buyer);
+        this.userBalances.set(match.buyer, buyerBalance + refund);
       }
-      const currentSellerPosition = sellerMarketPositions.get(outcomeId) || 0;
-      sellerMarketPositions.set(outcomeId, currentSellerPosition - match.quantity);
       
+      // Update seller balance only (position already deducted when order was placed)
       const sellerBalance = this.getUserBalance(match.seller);
       this.userBalances.set(match.seller, sellerBalance + match.price * match.quantity);
     }
