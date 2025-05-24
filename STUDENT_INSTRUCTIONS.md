@@ -47,13 +47,13 @@ The only market is called **LECTURE** and has 18 possible outcomes. You are bett
 @bot cancel LECTURE 5 123    - Cancel order ID 123
 ```
 
-### Check Your Status
+### Check Your Status (please DM the bot these commands to reduce channel spam)
 ```
-@bot balance              - See how many points you have (please DM the bot this command to reduce channel spam)
-@bot position LECTURE     - See all your current holdings (please DM the bot this command to reduce channel spam)
-@bot positions LECTURE    - Same as above (both work) (please DM the bot this command to reduce channel spam)
-@bot orders LECTURE       - View your open orders (please DM the bot this command to reduce channel spam)
-@bot help                 - Show all commands (please DM the bot this command to reduce channel spam)
+@bot balance              - See how many points you have
+@bot position LECTURE     - See all your current holdings
+@bot positions LECTURE    - Same as above (both work)
+@bot orders LECTURE       - View your open orders
+@bot help                 - Show all commands
 ```
 
 
@@ -74,12 +74,12 @@ The only market is called **LECTURE** and has 18 possible outcomes. You are bett
 
 ### 💬 Also Available in DMs (to reduce channel spam)
 You should also DM the bot directly for:
-- `balance` - Check your money privately (please DM the bot this command to reduce channel spam)
-- `positions LECTURE` - Check your holdings privately (please DM the bot this command to reduce channel spam)
-- `bundle-buy LECTURE 5` - Buy bundles privately (please DM the bot this command to reduce channel spam)
-- `bundle-sell LECTURE 2` - Sell bundles privately (please DM the bot this command to reduce channel spam)
-- `orders LECTURE` - View your open orders privately (please DM the bot this command to reduce channel spam)
-- `help` - Get help privately (please DM the bot this command to reduce channel spam)
+- `balance` - Check your money privately
+- `positions LECTURE` - Check your holdings privately
+- `bundle-buy LECTURE 5` - Buy bundles privately
+- `bundle-sell LECTURE 2` - Sell bundles privately
+- `orders LECTURE` - View your open orders privately
+- `help` - Get help privately
 
 ## How Markets Work
 
