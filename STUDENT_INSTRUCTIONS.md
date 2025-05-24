@@ -47,7 +47,7 @@ The only market is called **LECTURE** and has 18 possible outcomes. You are bett
 @bot cancel LECTURE 5 123    - Cancel order ID 123
 ```
 
-### Check Your Status (please DM the bot these commands to reduce channel spam)
+### Check Your Status (you can DM these commands directly without tagging the bot)
 ```
 @bot balance              - See how many points you have
 @bot position LECTURE     - See all your current holdings
