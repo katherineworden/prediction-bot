@@ -9,6 +9,7 @@ class SlackBot {
     this.marketManager = new MarketManager();
     this.slackEvents = createEventAdapter(this.signingSecret);
     this.adminUsers = config.adminUsers || []; // Array of admin user IDs
+    this.botUserId = null; // Will be set on start
     
     // Register graceful shutdown handler to save data
     process.on('SIGINT', this.handleShutdown.bind(this));
@@ -26,6 +27,15 @@ class SlackBot {
   }
 
   async start(port = 3000) {
+    // Get bot user ID to prevent responding to self
+    try {
+      const authTest = await this.web.auth.test();
+      this.botUserId = authTest.user_id;
+      console.log(`Bot user ID: ${this.botUserId}`);
+    } catch (error) {
+      console.error('Failed to get bot user ID:', error);
+    }
+    
     this.slackEvents.on('app_mention', this.handleMention.bind(this));
     this.slackEvents.on('message', this.handleMessage.bind(this));
     
@@ -130,6 +140,9 @@ class SlackBot {
     
     // Only handle direct messages
     if (event.subtype || !event.text) return;
+    
+    // CRITICAL: Ignore messages from the bot itself to prevent loops
+    if (event.bot_id || event.user === this.botUserId) return;
     
     // We'll assume that direct messages to the bot are coming from an im channel type
     // This avoids needing extra permissions
