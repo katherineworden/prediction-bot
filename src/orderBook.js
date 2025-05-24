@@ -10,6 +10,14 @@ class OrderBook {
   }
 
   addBid(price, quantity, userId) {
+    // Validate inputs
+    if (price <= 0 || price >= 1) {
+      throw new Error('Price must be between 0 and 1 (exclusive)');
+    }
+    if (!Number.isInteger(quantity) || quantity <= 0) {
+      throw new Error('Quantity must be a positive integer');
+    }
+    
     const order = { id: this.nextOrderId++, price, quantity, userId, side: 'buy', timestamp: Date.now() };
     this.bids.push(order);
     this.bids.sort((a, b) => b.price - a.price);
@@ -17,6 +25,14 @@ class OrderBook {
   }
 
   addAsk(price, quantity, userId) {
+    // Validate inputs
+    if (price <= 0 || price >= 1) {
+      throw new Error('Price must be between 0 and 1 (exclusive)');
+    }
+    if (!Number.isInteger(quantity) || quantity <= 0) {
+      throw new Error('Quantity must be a positive integer');
+    }
+    
     const order = { id: this.nextOrderId++, price, quantity, userId, side: 'sell', timestamp: Date.now() };
     this.asks.push(order);
     this.asks.sort((a, b) => a.price - b.price);

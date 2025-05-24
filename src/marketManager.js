@@ -55,6 +55,10 @@ class MarketManager {
       this.userBalances.set(userId, 1000); // Starting balance
       this.userPositions.set(userId, new Map());
     }
+    // Ensure user position map exists even if balance already exists
+    if (!this.userPositions.has(userId)) {
+      this.userPositions.set(userId, new Map());
+    }
   }
 
   buyBundle(userId, marketId, quantity) {
@@ -62,6 +66,11 @@ class MarketManager {
     const market = this.getMarket(marketId);
     if (!market) throw new Error('Market not found');
     if (market.resolved) throw new Error('Cannot trade on resolved market');
+    
+    // Validate quantity
+    if (!Number.isInteger(quantity) || quantity <= 0) {
+      throw new Error('Quantity must be a positive integer');
+    }
     
     const cost = this.bundlePrice * quantity;
     const balance = this.getUserBalance(userId);
@@ -95,6 +104,11 @@ class MarketManager {
     if (!market) throw new Error('Market not found');
     if (market.resolved) throw new Error('Cannot trade on resolved market');
     
+    // Validate quantity
+    if (!Number.isInteger(quantity) || quantity <= 0) {
+      throw new Error('Quantity must be a positive integer');
+    }
+    
     // Check if user has enough of each outcome
     const userPositions = this.userPositions.get(userId);
     const marketPositions = userPositions.get(marketId);
@@ -123,7 +137,10 @@ class MarketManager {
   }
 
   getUserBalance(userId) {
-    return this.userBalances.get(userId) || 0;
+    this.initializeUser(userId);
+    const balance = this.userBalances.get(userId) || 0;
+    // Safety check: ensure balance never goes negative due to float precision
+    return Math.max(0, Math.round(balance * 100) / 100);
   }
 
   getUserPosition(userId, marketId, outcomeId = null) {
@@ -149,6 +166,14 @@ class MarketManager {
     const market = this.getMarket(marketId);
     if (!market) throw new Error('Market not found');
     if (market.resolved) throw new Error('Cannot trade on resolved market');
+    
+    // Validate inputs
+    if (price <= 0 || price >= 1) {
+      throw new Error('Price must be between 0 and 1 (exclusive)');
+    }
+    if (!Number.isInteger(quantity) || quantity <= 0) {
+      throw new Error('Quantity must be a positive integer');
+    }
     
     const outcome = market.outcomes.get(outcomeId);
     if (!outcome) throw new Error('Outcome not found');
@@ -195,6 +220,14 @@ class MarketManager {
     if (!market) throw new Error('Market not found');
     if (market.resolved) throw new Error('Cannot trade on resolved market');
     
+    // Validate inputs
+    if (price <= 0 || price >= 1) {
+      throw new Error('Price must be between 0 and 1 (exclusive)');
+    }
+    if (!Number.isInteger(quantity) || quantity <= 0) {
+      throw new Error('Quantity must be a positive integer');
+    }
+    
     const outcome = market.outcomes.get(outcomeId);
     if (!outcome) throw new Error('Outcome not found');
     
@@ -239,6 +272,11 @@ class MarketManager {
     const market = this.getMarket(marketId);
     if (!market) throw new Error('Market not found');
     
+    // Validate quantity
+    if (!Number.isInteger(quantity) || quantity <= 0) {
+      throw new Error('Quantity must be a positive integer');
+    }
+    
     const outcome = market.outcomes.get(outcomeId);
     if (!outcome) throw new Error('Outcome not found');
     
@@ -249,7 +287,7 @@ class MarketManager {
     
     for (const ask of availableAsks) {
       const fillQty = Math.min(quantity - fillableQuantity, ask.quantity);
-      potentialCost += fillQty * ask.price;
+      potentialCost = Math.round((potentialCost + fillQty * ask.price) * 100) / 100;
       fillableQuantity += fillQty;
       
       if (fillableQuantity === quantity) break;
@@ -275,6 +313,11 @@ class MarketManager {
     this.initializeUser(userId);
     const market = this.getMarket(marketId);
     if (!market) throw new Error('Market not found');
+    
+    // Validate quantity
+    if (!Number.isInteger(quantity) || quantity <= 0) {
+      throw new Error('Quantity must be a positive integer');
+    }
     
     const outcome = market.outcomes.get(outcomeId);
     if (!outcome) throw new Error('Outcome not found');
@@ -412,6 +455,32 @@ class MarketManager {
     if (!market) throw new Error('Market not found');
     if (market.resolved) throw new Error('Market already resolved');
     
+    // First, cancel all outstanding orders and return escrowed funds/shares
+    for (const [outcomeId, outcome] of market.outcomes) {
+      // Cancel all buy orders (return escrowed money)
+      for (const bid of outcome.orderBook.bids) {
+        const escrowedCost = Math.round(bid.price * bid.quantity * 100) / 100;
+        const balance = this.getUserBalance(bid.userId);
+        this.userBalances.set(bid.userId, Math.round((balance + escrowedCost) * 100) / 100);
+      }
+      
+      // Cancel all sell orders (return escrowed shares)
+      for (const ask of outcome.orderBook.asks) {
+        const userPositions = this.userPositions.get(ask.userId);
+        if (userPositions) {
+          const marketPositions = userPositions.get(marketId);
+          if (marketPositions) {
+            const currentPosition = marketPositions.get(outcomeId) || 0;
+            marketPositions.set(outcomeId, currentPosition + ask.quantity);
+          }
+        }
+      }
+      
+      // Clear the order book
+      outcome.orderBook.bids = [];
+      outcome.orderBook.asks = [];
+    }
+    
     market.resolved = true;
     market.winningOutcome = winningOutcomeId;
     
@@ -422,9 +491,9 @@ class MarketManager {
       
       const winningShares = marketPositions.get(winningOutcomeId) || 0;
       if (winningShares > 0) {
-        const payout = winningShares * 1; // $1 per winning share
+        const payout = Math.round(winningShares * 1 * 100) / 100; // $1 per winning share
         const balance = this.getUserBalance(userId);
-        this.userBalances.set(userId, balance + payout);
+        this.userBalances.set(userId, Math.round((balance + payout) * 100) / 100);
       }
       
       // Clear all positions in this market
