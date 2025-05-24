@@ -73,7 +73,7 @@ The only market is called **LECTURE** and has 18 possible outcomes. You are bett
 - **Market creation** - New markets being created
 
 ### 💬 Also Available in DMs
-You should also DM the bot directly for:
+You should DM the bot directly for:
 - `balance` - Check your money privately
 - `positions LECTURE` - Check your holdings privately
 - `bundle-buy LECTURE 5` - Buy bundles privately
