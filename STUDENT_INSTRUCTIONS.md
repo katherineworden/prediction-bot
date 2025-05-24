@@ -32,8 +32,8 @@ The only market is called **LECTURE** and has 18 possible outcomes. You are bett
 ```
 @bot buy [market_id] [outcome_id] [shares] [price]  - Buy shares in an outcome
 @bot sell [market_id] [outcome_id] [shares] [price] - Sell shares you own
-@bot bundle-buy [market_id] [shares]                - Buy 1 share of each outcome (please DM the bot this command to reduce channel spam)
-@bot bundle-sell [market_id] [shares]               - Sell 1 share of each outcome (please DM the bot this command to reduce channel spam)
+@bot bundle-buy [market_id] [shares]                - Buy 1 share of each outcome (please DM the bot this command)
+@bot bundle-sell [market_id] [shares]               - Sell 1 share of each outcome (please DM the bot this command)
 @bot cancel [market_id] [outcome_id] [order_id]     - Cancel an open order
 ```
 
