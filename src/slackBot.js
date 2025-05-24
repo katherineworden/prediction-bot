@@ -237,6 +237,9 @@ class SlackBot {
                (this.isAdmin(userId) && (text.startsWith('create ') || text.startsWith('resolve ')))) {
       // For other commands, tell users to use them in public channels with @mentions
       await this.sendMessage(event.channel, 'Please use this command in a channel by mentioning the bot: `@bot ' + text + '`', thread_ts);
+    } else {
+      // Unrecognized command in DM
+      await this.sendMessage(event.channel, `I don't recognize that command. Available DM commands:\n• \`balance\`\n• \`positions <market_id>\`\n• \`bundle-buy <market_id> <quantity>\`\n• \`bundle-sell <market_id> <quantity>\`\n• \`orders <market_id>\`\n• \`list\`\n• \`help\`\n\nFor other commands, please use them in a channel by mentioning me.`, thread_ts);
     }
   }
 
@@ -538,7 +541,7 @@ class SlackBot {
         await this.sendMessage(channel, `You bought ${result.bundlesBought} bundles for $${result.cost.toFixed(2)}`, thread_ts);
       } else {
         // In channel, send confirmation and guide to DM
-        await this.sendMessage(channel, `✅ Bundle purchase successful! Please use bundle commands in DM.`, thread_ts);
+        await this.sendMessage(channel, `✅ Bundle purchase successful! Please use bundle commands in DM to reduce spam in the channel.`, thread_ts);
         // Send details privately
         await this.web.chat.postEphemeral({
           channel,
@@ -595,7 +598,7 @@ class SlackBot {
         await this.sendMessage(channel, `You sold ${result.bundlesSold} bundles for $${result.revenue.toFixed(2)}`, thread_ts);
       } else {
         // In channel, send confirmation and guide to DM
-        await this.sendMessage(channel, `✅ Bundle sale successful! Please use bundle commands in DM.`, thread_ts);
+        await this.sendMessage(channel, `✅ Bundle sale successful! Please use bundle commands in DM to reduce spam in the channel.`, thread_ts);
         // Send details privately
         await this.web.chat.postEphemeral({
           channel,
