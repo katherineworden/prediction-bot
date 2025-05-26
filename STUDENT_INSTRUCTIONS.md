@@ -13,6 +13,9 @@ The only market is called **LECTURE** and has 18 possible outcomes. You are bett
 
 - **Outcomes 1-15**: Regular course lectures 
 - **Outcomes 16-18**: Guest lectures
+  - Lecture 16: Eric Neyman
+  - Lecture 17: Kshipra Bhawalkar
+  - Lecture 18: Geoff Ramseyer
 - Outcomes are numbered starting from 1 (not 0) as they appear on Ed (the course discussion board)
 
 ## Getting Started
