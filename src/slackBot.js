@@ -144,6 +144,20 @@ class SlackBot {
     // CRITICAL: Ignore messages from the bot itself to prevent loops
     if (event.bot_id || event.user === this.botUserId) return;
     
+    // IMPORTANT: Ignore messages that mention the bot (these are handled by handleMention)
+    // Check if the message contains a bot mention
+    const botMentionPattern = new RegExp(`<@${this.botUserId}>`);
+    if (botMentionPattern.test(event.text)) {
+      console.log('Ignoring message event - contains bot mention, will be handled by app_mention');
+      return;
+    }
+    
+    // Only handle DMs - channels starting with 'D' are DMs
+    if (!event.channel.startsWith('D')) {
+      console.log('Ignoring message event - not a DM');
+      return;
+    }
+    
     // We'll assume that direct messages to the bot are coming from an im channel type
     // This avoids needing extra permissions
     const userId = event.user;
