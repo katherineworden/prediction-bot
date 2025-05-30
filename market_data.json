@@ -1,7 +1,1362 @@
 {
-  "markets": {},
-  "userBalances": {},
-  "userPositions": {},
-  "orderBooks": {},
-  "userOrders": {}
+  "markets": {
+    "LECTURE": {
+      "id": "LECTURE",
+      "description": "Which lecture will be voted most popular?",
+      "outcomes": {
+        "1": {
+          "name": "Lecture 1",
+          "orderBook": {
+            "outcomeId": "1",
+            "bids": [
+              {
+                "id": 3,
+                "price": 0.05,
+                "quantity": 99,
+                "userId": "U020PRBNJNA",
+                "side": "buy",
+                "timestamp": 1748647616036
+              },
+              {
+                "id": 4,
+                "price": 0.05,
+                "quantity": 15,
+                "userId": "W01AN4FKLMC",
+                "side": "buy",
+                "timestamp": 1748647616036
+              },
+              {
+                "id": 5,
+                "price": 0.05,
+                "quantity": 20,
+                "userId": "U05M5AEHYJ2",
+                "side": "buy",
+                "timestamp": 1748647616036
+              },
+              {
+                "id": 7,
+                "price": 0.05,
+                "quantity": 1,
+                "userId": "U05HYESS9PT",
+                "side": "buy",
+                "timestamp": 1748647616036
+              },
+              {
+                "id": 9,
+                "price": 0.02,
+                "quantity": 4,
+                "userId": "U02CGR5H17G",
+                "side": "buy",
+                "timestamp": 1748647616037
+              },
+              {
+                "id": 1,
+                "price": 0.01,
+                "quantity": 1,
+                "userId": "U02DCBFDHRN",
+                "side": "buy",
+                "timestamp": 1748647616035
+              }
+            ],
+            "asks": [
+              {
+                "id": 2,
+                "price": 0.1,
+                "quantity": 999,
+                "userId": "WTBE811MJ",
+                "side": "sell",
+                "timestamp": 1748647616036
+              }
+            ],
+            "lastPrice": 0.1,
+            "volume": 2,
+            "changePercent": 0,
+            "nextOrderId": 10
+          }
+        },
+        "2": {
+          "name": "Lecture 2",
+          "orderBook": {
+            "outcomeId": "2",
+            "bids": [
+              {
+                "id": 6,
+                "price": 0.05,
+                "quantity": 497,
+                "userId": "U020PRBNJNA",
+                "side": "buy",
+                "timestamp": 1748647616036
+              },
+              {
+                "id": 8,
+                "price": 0.02,
+                "quantity": 3,
+                "userId": "U03F2RX661G",
+                "side": "buy",
+                "timestamp": 1748647616036
+              },
+              {
+                "id": 3,
+                "price": 0.01,
+                "quantity": 1,
+                "userId": "U02DCBFDHRN",
+                "side": "buy",
+                "timestamp": 1748647616035
+              }
+            ],
+            "asks": [
+              {
+                "id": 5,
+                "price": 0.1,
+                "quantity": 994,
+                "userId": "WTBE811MJ",
+                "side": "sell",
+                "timestamp": 1748647616036
+              }
+            ],
+            "lastPrice": 0.1,
+            "volume": 11,
+            "changePercent": 0,
+            "nextOrderId": 10
+          }
+        },
+        "3": {
+          "name": "Lecture 3",
+          "orderBook": {
+            "outcomeId": "3",
+            "bids": [
+              {
+                "id": 1,
+                "price": 0.01,
+                "quantity": 1,
+                "userId": "U02DCBFDHRN",
+                "side": "buy",
+                "timestamp": 1748647616035
+              }
+            ],
+            "asks": [
+              {
+                "id": 2,
+                "price": 0.1,
+                "quantity": 1000,
+                "userId": "WTBE811MJ",
+                "side": "sell",
+                "timestamp": 1748647616036
+              },
+              {
+                "id": 3,
+                "price": 0.5,
+                "quantity": 100,
+                "userId": "W01BY4RHRV2",
+                "side": "sell",
+                "timestamp": 1748647616036
+              }
+            ],
+            "lastPrice": null,
+            "volume": 0,
+            "changePercent": 0,
+            "nextOrderId": 4
+          }
+        },
+        "4": {
+          "name": "Lecture 4",
+          "orderBook": {
+            "outcomeId": "4",
+            "bids": [
+              {
+                "id": 12,
+                "price": 0.05,
+                "quantity": 19,
+                "userId": "W01AN4FKLMC",
+                "side": "buy",
+                "timestamp": 1748647616036
+              },
+              {
+                "id": 11,
+                "price": 0.04,
+                "quantity": 20,
+                "userId": "W01AN4FKLMC",
+                "side": "buy",
+                "timestamp": 1748647616036
+              },
+              {
+                "id": 3,
+                "price": 0.01,
+                "quantity": 1,
+                "userId": "U02DCBFDHRN",
+                "side": "buy",
+                "timestamp": 1748647616036
+              }
+            ],
+            "asks": [
+              {
+                "id": 8,
+                "price": 0.1,
+                "quantity": 894,
+                "userId": "WTBE811MJ",
+                "side": "sell",
+                "timestamp": 1748647616036
+              },
+              {
+                "id": 14,
+                "price": 0.2,
+                "quantity": 1,
+                "userId": "U07N9BJP69M",
+                "side": "sell",
+                "timestamp": 1748647616036
+              },
+              {
+                "id": 4,
+                "price": 0.9,
+                "quantity": 1,
+                "userId": "U02DCBFDHRN",
+                "side": "sell",
+                "timestamp": 1748647616036
+              }
+            ],
+            "lastPrice": 0.05,
+            "volume": 108,
+            "changePercent": 0,
+            "nextOrderId": 16
+          }
+        },
+        "5": {
+          "name": "Lecture 5",
+          "orderBook": {
+            "outcomeId": "5",
+            "bids": [
+              {
+                "id": 4,
+                "price": 0.05,
+                "quantity": 100,
+                "userId": "U020PRBNJNA",
+                "side": "buy",
+                "timestamp": 1748647616036
+              },
+              {
+                "id": 1,
+                "price": 0.01,
+                "quantity": 1,
+                "userId": "U02DCBFDHRN",
+                "side": "buy",
+                "timestamp": 1748647616036
+              }
+            ],
+            "asks": [
+              {
+                "id": 3,
+                "price": 0.1,
+                "quantity": 999,
+                "userId": "WTBE811MJ",
+                "side": "sell",
+                "timestamp": 1748647616036
+              },
+              {
+                "id": 2,
+                "price": 0.15,
+                "quantity": 5,
+                "userId": "W01BZM4PV60",
+                "side": "sell",
+                "timestamp": 1748647616036
+              },
+              {
+                "id": 5,
+                "price": 0.2,
+                "quantity": 5,
+                "userId": "U02E5T2JKUJ",
+                "side": "sell",
+                "timestamp": 1748647616036
+              }
+            ],
+            "lastPrice": 0.1,
+            "volume": 1,
+            "changePercent": 0,
+            "nextOrderId": 7
+          }
+        },
+        "6": {
+          "name": "Lecture 6",
+          "orderBook": {
+            "outcomeId": "6",
+            "bids": [
+              {
+                "id": 3,
+                "price": 0.02,
+                "quantity": 5,
+                "userId": "W01BRPU5NF5",
+                "side": "buy",
+                "timestamp": 1748647616036
+              }
+            ],
+            "asks": [
+              {
+                "id": 1,
+                "price": 0.1,
+                "quantity": 1000,
+                "userId": "WTBE811MJ",
+                "side": "sell",
+                "timestamp": 1748647616036
+              },
+              {
+                "id": 2,
+                "price": 0.6,
+                "quantity": 100,
+                "userId": "W01BY4RHRV2",
+                "side": "sell",
+                "timestamp": 1748647616036
+              }
+            ],
+            "lastPrice": null,
+            "volume": 0,
+            "changePercent": 0,
+            "nextOrderId": 4
+          }
+        },
+        "7": {
+          "name": "Lecture 7",
+          "orderBook": {
+            "outcomeId": "7",
+            "bids": [
+              {
+                "id": 1,
+                "price": 0.01,
+                "quantity": 1,
+                "userId": "U02DCBFDHRN",
+                "side": "buy",
+                "timestamp": 1748647616036
+              }
+            ],
+            "asks": [
+              {
+                "id": 2,
+                "price": 0.1,
+                "quantity": 1000,
+                "userId": "WTBE811MJ",
+                "side": "sell",
+                "timestamp": 1748647616036
+              }
+            ],
+            "lastPrice": null,
+            "volume": 0,
+            "changePercent": 0,
+            "nextOrderId": 3
+          }
+        },
+        "8": {
+          "name": "Lecture 8",
+          "orderBook": {
+            "outcomeId": "8",
+            "bids": [
+              {
+                "id": 3,
+                "price": 0.04,
+                "quantity": 50,
+                "userId": "U03TXUH8UGZ",
+                "side": "buy",
+                "timestamp": 1748647616036
+              },
+              {
+                "id": 1,
+                "price": 0.01,
+                "quantity": 1,
+                "userId": "U02DCBFDHRN",
+                "side": "buy",
+                "timestamp": 1748647616036
+              }
+            ],
+            "asks": [
+              {
+                "id": 2,
+                "price": 0.1,
+                "quantity": 1000,
+                "userId": "WTBE811MJ",
+                "side": "sell",
+                "timestamp": 1748647616036
+              }
+            ],
+            "lastPrice": null,
+            "volume": 0,
+            "changePercent": 0,
+            "nextOrderId": 4
+          }
+        },
+        "9": {
+          "name": "Lecture 9",
+          "orderBook": {
+            "outcomeId": "9",
+            "bids": [
+              {
+                "id": 4,
+                "price": 0.04,
+                "quantity": 19,
+                "userId": "W01AN4FKLMC",
+                "side": "buy",
+                "timestamp": 1748647616036
+              },
+              {
+                "id": 7,
+                "price": 0.04,
+                "quantity": 100,
+                "userId": "U05HYESS9PT",
+                "side": "buy",
+                "timestamp": 1748647616036
+              },
+              {
+                "id": 5,
+                "price": 0.02,
+                "quantity": 50,
+                "userId": "U03TXUH8UGZ",
+                "side": "buy",
+                "timestamp": 1748647616036
+              },
+              {
+                "id": 1,
+                "price": 0.01,
+                "quantity": 1,
+                "userId": "U02DCBFDHRN",
+                "side": "buy",
+                "timestamp": 1748647616036
+              }
+            ],
+            "asks": [
+              {
+                "id": 2,
+                "price": 0.1,
+                "quantity": 990,
+                "userId": "WTBE811MJ",
+                "side": "sell",
+                "timestamp": 1748647616036
+              }
+            ],
+            "lastPrice": 0.04,
+            "volume": 11,
+            "changePercent": 0,
+            "nextOrderId": 8
+          }
+        },
+        "10": {
+          "name": "Lecture 10",
+          "orderBook": {
+            "outcomeId": "10",
+            "bids": [
+              {
+                "id": 3,
+                "price": 0.02,
+                "quantity": 50,
+                "userId": "U05M5AEHYJ2",
+                "side": "buy",
+                "timestamp": 1748647616036
+              },
+              {
+                "id": 1,
+                "price": 0.01,
+                "quantity": 1,
+                "userId": "U02DCBFDHRN",
+                "side": "buy",
+                "timestamp": 1748647616036
+              }
+            ],
+            "asks": [
+              {
+                "id": 4,
+                "price": 0.05,
+                "quantity": 12,
+                "userId": "U02E5T2JKUJ",
+                "side": "sell",
+                "timestamp": 1748647616036
+              },
+              {
+                "id": 2,
+                "price": 0.1,
+                "quantity": 1000,
+                "userId": "WTBE811MJ",
+                "side": "sell",
+                "timestamp": 1748647616036
+              }
+            ],
+            "lastPrice": 0.03,
+            "volume": 1,
+            "changePercent": 0,
+            "nextOrderId": 7
+          }
+        },
+        "11": {
+          "name": "Lecture 11",
+          "orderBook": {
+            "outcomeId": "11",
+            "bids": [
+              {
+                "id": 1,
+                "price": 0.01,
+                "quantity": 1,
+                "userId": "U02DCBFDHRN",
+                "side": "buy",
+                "timestamp": 1748647616036
+              }
+            ],
+            "asks": [
+              {
+                "id": 2,
+                "price": 0.1,
+                "quantity": 40,
+                "userId": "WTBE811MJ",
+                "side": "sell",
+                "timestamp": 1748647616036
+              },
+              {
+                "id": 5,
+                "price": 0.9,
+                "quantity": 1,
+                "userId": "U02U30301RS",
+                "side": "sell",
+                "timestamp": 1748647616037
+              },
+              {
+                "id": 7,
+                "price": 0.99,
+                "quantity": 1,
+                "userId": "U05GLC6KNAF",
+                "side": "sell",
+                "timestamp": 1748647616037
+              }
+            ],
+            "lastPrice": 0.1,
+            "volume": 960,
+            "changePercent": 0,
+            "nextOrderId": 8
+          }
+        },
+        "12": {
+          "name": "Lecture 12",
+          "orderBook": {
+            "outcomeId": "12",
+            "bids": [
+              {
+                "id": 1,
+                "price": 0.01,
+                "quantity": 1,
+                "userId": "U02DCBFDHRN",
+                "side": "buy",
+                "timestamp": 1748647616036
+              }
+            ],
+            "asks": [
+              {
+                "id": 2,
+                "price": 0.1,
+                "quantity": 940,
+                "userId": "WTBE811MJ",
+                "side": "sell",
+                "timestamp": 1748647616036
+              },
+              {
+                "id": 5,
+                "price": 0.2,
+                "quantity": 5,
+                "userId": "U05EM62S8TG",
+                "side": "sell",
+                "timestamp": 1748647616037
+              }
+            ],
+            "lastPrice": 0.1,
+            "volume": 60,
+            "changePercent": 0,
+            "nextOrderId": 6
+          }
+        },
+        "13": {
+          "name": "Lecture 13",
+          "orderBook": {
+            "outcomeId": "13",
+            "bids": [
+              {
+                "id": 2,
+                "price": 0.01,
+                "quantity": 1,
+                "userId": "U02DCBFDHRN",
+                "side": "buy",
+                "timestamp": 1748647616036
+              }
+            ],
+            "asks": [
+              {
+                "id": 4,
+                "price": 0.1,
+                "quantity": 1000,
+                "userId": "WTBE811MJ",
+                "side": "sell",
+                "timestamp": 1748647616036
+              }
+            ],
+            "lastPrice": 0.5,
+            "volume": 1,
+            "changePercent": 0,
+            "nextOrderId": 5
+          }
+        },
+        "14": {
+          "name": "Lecture 14",
+          "orderBook": {
+            "outcomeId": "14",
+            "bids": [],
+            "asks": [
+              {
+                "id": 1,
+                "price": 0.1,
+                "quantity": 1000,
+                "userId": "WTBE811MJ",
+                "side": "sell",
+                "timestamp": 1748647616036
+              }
+            ],
+            "lastPrice": null,
+            "volume": 0,
+            "changePercent": 0,
+            "nextOrderId": 2
+          }
+        },
+        "15": {
+          "name": "Lecture 15",
+          "orderBook": {
+            "outcomeId": "15",
+            "bids": [
+              {
+                "id": 1,
+                "price": 0.01,
+                "quantity": 1,
+                "userId": "U02DCBFDHRN",
+                "side": "buy",
+                "timestamp": 1748647616036
+              }
+            ],
+            "asks": [
+              {
+                "id": 2,
+                "price": 0.1,
+                "quantity": 1000,
+                "userId": "WTBE811MJ",
+                "side": "sell",
+                "timestamp": 1748647616036
+              }
+            ],
+            "lastPrice": null,
+            "volume": 0,
+            "changePercent": 0,
+            "nextOrderId": 3
+          }
+        },
+        "16": {
+          "name": "Guest Lecture 16",
+          "orderBook": {
+            "outcomeId": "16",
+            "bids": [
+              {
+                "id": 12,
+                "price": 0.55,
+                "quantity": 10,
+                "userId": "U01K5EZPTNY",
+                "side": "buy",
+                "timestamp": 1748647616036
+              },
+              {
+                "id": 11,
+                "price": 0.5,
+                "quantity": 200,
+                "userId": "U05739YAYS1",
+                "side": "buy",
+                "timestamp": 1748647616036
+              },
+              {
+                "id": 7,
+                "price": 0.35,
+                "quantity": 100,
+                "userId": "U03F2RX661G",
+                "side": "buy",
+                "timestamp": 1748647616036
+              },
+              {
+                "id": 5,
+                "price": 0.3,
+                "quantity": 500,
+                "userId": "WTBE811MJ",
+                "side": "buy",
+                "timestamp": 1748647616036
+              },
+              {
+                "id": 6,
+                "price": 0.1,
+                "quantity": 100,
+                "userId": "U03F2RX661G",
+                "side": "buy",
+                "timestamp": 1748647616036
+              },
+              {
+                "id": 8,
+                "price": 0.1,
+                "quantity": 50,
+                "userId": "W01BY4RHRV2",
+                "side": "buy",
+                "timestamp": 1748647616036
+              },
+              {
+                "id": 9,
+                "price": 0.08,
+                "quantity": 1000,
+                "userId": "U020PRBNJNA",
+                "side": "buy",
+                "timestamp": 1748647616036
+              },
+              {
+                "id": 10,
+                "price": 0.04,
+                "quantity": 15,
+                "userId": "W01AN4FKLMC",
+                "side": "buy",
+                "timestamp": 1748647616036
+              },
+              {
+                "id": 1,
+                "price": 0.01,
+                "quantity": 1,
+                "userId": "U02DCBFDHRN",
+                "side": "buy",
+                "timestamp": 1748647616036
+              },
+              {
+                "id": 13,
+                "price": 0.01,
+                "quantity": 1,
+                "userId": "U01K5EZPTNY",
+                "side": "buy",
+                "timestamp": 1748647616036
+              }
+            ],
+            "asks": [],
+            "lastPrice": 0.49,
+            "volume": 1000,
+            "changePercent": 0,
+            "nextOrderId": 14
+          }
+        },
+        "17": {
+          "name": "Guest Lecture 17",
+          "orderBook": {
+            "outcomeId": "17",
+            "bids": [
+              {
+                "id": 12,
+                "price": 0.3,
+                "quantity": 1,
+                "userId": "U02CGR5H17G",
+                "side": "buy",
+                "timestamp": 1748647616037
+              },
+              {
+                "id": 7,
+                "price": 0.15,
+                "quantity": 500,
+                "userId": "WTBE811MJ",
+                "side": "buy",
+                "timestamp": 1748647616036
+              },
+              {
+                "id": 11,
+                "price": 0.1,
+                "quantity": 1,
+                "userId": "U02CGR5H17G",
+                "side": "buy",
+                "timestamp": 1748647616037
+              },
+              {
+                "id": 10,
+                "price": 0.08,
+                "quantity": 1,
+                "userId": "U02CGR5H17G",
+                "side": "buy",
+                "timestamp": 1748647616037
+              },
+              {
+                "id": 9,
+                "price": 0.05,
+                "quantity": 1,
+                "userId": "U02CGR5H17G",
+                "side": "buy",
+                "timestamp": 1748647616037
+              },
+              {
+                "id": 1,
+                "price": 0.01,
+                "quantity": 1,
+                "userId": "U02DCBFDHRN",
+                "side": "buy",
+                "timestamp": 1748647616036
+              }
+            ],
+            "asks": [
+              {
+                "id": 4,
+                "price": 0.4,
+                "quantity": 990,
+                "userId": "U07PD874NQ0",
+                "side": "sell",
+                "timestamp": 1748647616036
+              }
+            ],
+            "lastPrice": 0.4,
+            "volume": 1110,
+            "changePercent": 0,
+            "nextOrderId": 13
+          }
+        },
+        "18": {
+          "name": "Guest Lecture 18",
+          "orderBook": {
+            "outcomeId": "18",
+            "bids": [
+              {
+                "id": 5,
+                "price": 0.2,
+                "quantity": 500,
+                "userId": "WTBE811MJ",
+                "side": "buy",
+                "timestamp": 1748647616036
+              },
+              {
+                "id": 6,
+                "price": 0.01,
+                "quantity": 1,
+                "userId": "U02E5T2JKUJ",
+                "side": "buy",
+                "timestamp": 1748647616036
+              }
+            ],
+            "asks": [
+              {
+                "id": 3,
+                "price": 0.4,
+                "quantity": 1000,
+                "userId": "U07PD874NQ0",
+                "side": "sell",
+                "timestamp": 1748647616036
+              }
+            ],
+            "lastPrice": 0.1,
+            "volume": 1000,
+            "changePercent": 0,
+            "nextOrderId": 7
+          }
+        }
+      },
+      "created": 1748647616034,
+      "resolved": false
+    }
+  },
+  "userBalances": {
+    "U01K5EZPTNY": 994.39,
+    "U020PRBNJNA": 885.13,
+    "U02CGR5H17G": 999.36,
+    "U02DCBFDHRN": 999.35,
+    "U02E5T2JKUJ": 986.99,
+    "U02E8SNJAAF": 893.06,
+    "U02U30301RS": 998.9,
+    "U03F2RX661G": 944.94,
+    "U03F2S3T726": 999.9,
+    "U03TXUH8UGZ": 987,
+    "U056ZKUAZFG": 996.8,
+    "U05739YAYS1": 814,
+    "U0576830LG2": 999,
+    "U05EM62S8TG": 999,
+    "U05GLC6KNAF": 999,
+    "U05HYESS9PT": 985.95,
+    "U05M5AEHYJ2": 998,
+    "U05TUQJH37Z": 995,
+    "U07KLGFKKU2": 10.9,
+    "U07N9BJP69M": 998.9,
+    "U07PD874NQ0": 800,
+    "W011MRRL675": 949.9,
+    "W012HNJ8E7Q": 1000,
+    "W01AN4FKLMC": 996.05,
+    "W01AW4YCM43": 998,
+    "W01BRPU5NF5": 999.4,
+    "W01BY4RHRV2": 619.6,
+    "W01BZM4PV60": 979.93,
+    "WAB629GCS": 500,
+    "WD2NHEAHH": 993,
+    "WTBE811MJ": 178.4
+  },
+  "userPositions": {
+    "U01K5EZPTNY": {
+      "LECTURE": {
+        "5": 1
+      }
+    },
+    "U020PRBNJNA": {
+      "LECTURE": {
+        "1": 1,
+        "2": 3
+      }
+    },
+    "U02CGR5H17G": {
+      "LECTURE": {
+        "10": 1
+      }
+    },
+    "U02DCBFDHRN": {
+      "LECTURE": {
+        "1": 1,
+        "2": 1,
+        "3": 1,
+        "4": 0,
+        "5": 1,
+        "6": 1,
+        "7": 1,
+        "8": 1,
+        "9": 1,
+        "10": 1,
+        "11": 1,
+        "12": 1,
+        "13": 0,
+        "14": 1,
+        "15": 1,
+        "16": 1,
+        "17": 1,
+        "18": 1
+      }
+    },
+    "U02E5T2JKUJ": {
+      "LECTURE": {
+        "1": 13,
+        "2": 13,
+        "3": 13,
+        "4": 13,
+        "5": 8,
+        "6": 13,
+        "7": 13,
+        "8": 13,
+        "9": 13,
+        "10": 1,
+        "11": 13,
+        "12": 13,
+        "13": 13,
+        "14": 13,
+        "15": 13,
+        "16": 13,
+        "17": 13,
+        "18": 13
+      }
+    },
+    "U02E8SNJAAF": {
+      "LECTURE": {
+        "1": 103,
+        "2": 100,
+        "3": 103,
+        "4": 103,
+        "5": 103,
+        "6": 103,
+        "7": 103,
+        "8": 103,
+        "9": 103,
+        "10": 103,
+        "11": 103,
+        "12": 103,
+        "13": 103,
+        "14": 103,
+        "15": 103,
+        "16": 103,
+        "17": 113,
+        "18": 103
+      }
+    },
+    "U02U30301RS": {
+      "LECTURE": {
+        "1": 2,
+        "2": 1,
+        "3": 1,
+        "4": 1,
+        "5": 1,
+        "6": 1,
+        "7": 1,
+        "8": 1,
+        "9": 1,
+        "10": 1,
+        "11": 0,
+        "12": 1,
+        "13": 1,
+        "14": 1,
+        "15": 1,
+        "16": 1,
+        "17": 1,
+        "18": 1
+      }
+    },
+    "U03F2RX661G": {
+      "LECTURE": {
+        "4": 100
+      }
+    },
+    "U03F2S3T726": {
+      "LECTURE": {
+        "4": 1
+      }
+    },
+    "U03TXUH8UGZ": {
+      "LECTURE": {
+        "1": 10,
+        "2": 10,
+        "3": 10,
+        "4": 10,
+        "5": 10,
+        "6": 10,
+        "7": 10,
+        "8": 10,
+        "9": 10,
+        "10": 10,
+        "11": 10,
+        "12": 10,
+        "13": 10,
+        "14": 10,
+        "15": 10,
+        "16": 10,
+        "17": 10,
+        "18": 10
+      }
+    },
+    "U056ZKUAZFG": {
+      "LECTURE": {
+        "1": 1,
+        "2": 3,
+        "3": 1,
+        "4": 3,
+        "5": 1,
+        "6": 1,
+        "7": 1,
+        "8": 1,
+        "9": 1,
+        "10": 1,
+        "11": 1,
+        "12": 1,
+        "13": 2,
+        "14": 1,
+        "15": 1,
+        "16": 1,
+        "17": 1,
+        "18": 1
+      }
+    },
+    "U05739YAYS1": {
+      "LECTURE": {
+        "1": 6,
+        "2": 6,
+        "3": 6,
+        "4": 6,
+        "5": 6,
+        "6": 6,
+        "7": 6,
+        "8": 6,
+        "9": 6,
+        "10": 6,
+        "11": 856,
+        "12": 6,
+        "13": 6,
+        "14": 6,
+        "15": 6,
+        "16": 6,
+        "17": 6,
+        "18": 6
+      }
+    },
+    "U0576830LG2": {
+      "LECTURE": {
+        "1": 1,
+        "2": 1,
+        "3": 1,
+        "4": 1,
+        "5": 1,
+        "6": 1,
+        "7": 1,
+        "8": 1,
+        "9": 1,
+        "10": 1,
+        "11": 1,
+        "12": 1,
+        "13": 1,
+        "14": 1,
+        "15": 1,
+        "16": 1,
+        "17": 1,
+        "18": 1
+      }
+    },
+    "U05EM62S8TG": {
+      "LECTURE": {
+        "12": 5
+      }
+    },
+    "U05GLC6KNAF": {
+      "LECTURE": {
+        "11": 9
+      }
+    },
+    "U05HYESS9PT": {
+      "LECTURE": {
+        "11": 100
+      }
+    },
+    "U05M5AEHYJ2": {},
+    "U05TUQJH37Z": {
+      "LECTURE": {
+        "1": 5,
+        "2": 5,
+        "3": 5,
+        "4": 5,
+        "5": 5,
+        "6": 5,
+        "7": 5,
+        "8": 5,
+        "9": 5,
+        "10": 5,
+        "11": 5,
+        "12": 5,
+        "13": 5,
+        "14": 5,
+        "15": 5,
+        "16": 5,
+        "17": 5,
+        "18": 5
+      }
+    },
+    "U07KLGFKKU2": {
+      "LECTURE": {
+        "1": 499,
+        "2": 500,
+        "3": 499,
+        "4": 499,
+        "5": 499,
+        "6": 499,
+        "7": 499,
+        "8": 499,
+        "9": 499,
+        "10": 499,
+        "11": 499,
+        "12": 499,
+        "13": 499,
+        "14": 499,
+        "15": 499,
+        "16": 1499,
+        "17": 499,
+        "18": 499
+      }
+    },
+    "U07N9BJP69M": {
+      "LECTURE": {
+        "1": 1,
+        "2": 1,
+        "3": 1,
+        "4": 1,
+        "5": 1,
+        "6": 1,
+        "7": 1,
+        "8": 1,
+        "9": 1,
+        "10": 1,
+        "11": 1,
+        "12": 1,
+        "13": 1,
+        "14": 1,
+        "15": 1,
+        "16": 1,
+        "17": 1,
+        "18": 1
+      }
+    },
+    "U07PD874NQ0": {
+      "LECTURE": {
+        "1": 4,
+        "2": 4,
+        "3": 4,
+        "4": 4,
+        "5": 4,
+        "6": 4,
+        "7": 4,
+        "8": 4,
+        "9": 4,
+        "10": 4,
+        "11": 4,
+        "12": 4,
+        "13": 4,
+        "14": 4,
+        "15": 4,
+        "16": 4,
+        "17": 4,
+        "18": 4
+      }
+    },
+    "W011MRRL675": {
+      "LECTURE": {
+        "1": 51,
+        "2": 49,
+        "3": 51,
+        "4": 52,
+        "5": 51,
+        "6": 51,
+        "7": 51,
+        "8": 51,
+        "9": 51,
+        "10": 51,
+        "11": 51,
+        "12": 51,
+        "13": 51,
+        "14": 51,
+        "15": 51,
+        "16": 51,
+        "17": 51,
+        "18": 51
+      }
+    },
+    "W012HNJ8E7Q": {},
+    "W01AN4FKLMC": {
+      "LECTURE": {
+        "4": 1,
+        "9": 1
+      }
+    },
+    "W01AW4YCM43": {
+      "LECTURE": {
+        "1": 2,
+        "2": 2,
+        "3": 2,
+        "4": 2,
+        "5": 2,
+        "6": 2,
+        "7": 2,
+        "8": 2,
+        "9": 2,
+        "10": 2,
+        "11": 2,
+        "12": 2,
+        "13": 2,
+        "14": 2,
+        "15": 2,
+        "16": 2,
+        "17": 2,
+        "18": 2
+      }
+    },
+    "W01BRPU5NF5": {
+      "LECTURE": {
+        "2": 5
+      }
+    },
+    "W01BY4RHRV2": {
+      "LECTURE": {
+        "1": 400,
+        "2": 400,
+        "3": 300,
+        "4": 399,
+        "5": 400,
+        "6": 300,
+        "7": 400,
+        "8": 400,
+        "9": 410,
+        "10": 400,
+        "11": 400,
+        "12": 450,
+        "13": 400,
+        "14": 400,
+        "15": 400,
+        "16": 400,
+        "17": 300,
+        "18": 400
+      }
+    },
+    "W01BZM4PV60": {
+      "LECTURE": {
+        "1": 19,
+        "2": 20,
+        "3": 20,
+        "4": 21,
+        "5": 15,
+        "6": 20,
+        "7": 20,
+        "8": 20,
+        "9": 19,
+        "10": 19,
+        "11": 20,
+        "12": 20,
+        "13": 20,
+        "14": 20,
+        "15": 20,
+        "16": 20,
+        "17": 20,
+        "18": 20
+      }
+    },
+    "WAB629GCS": {
+      "LECTURE": {
+        "1": 500,
+        "2": 500,
+        "3": 500,
+        "4": 500,
+        "5": 500,
+        "6": 500,
+        "7": 500,
+        "8": 500,
+        "9": 500,
+        "10": 500,
+        "11": 500,
+        "12": 500,
+        "13": 500,
+        "14": 500,
+        "15": 500,
+        "16": 500,
+        "17": 500,
+        "18": 500
+      }
+    },
+    "WD2NHEAHH": {
+      "LECTURE": {
+        "1": 7,
+        "2": 7,
+        "3": 7,
+        "4": 7,
+        "5": 7,
+        "6": 7,
+        "7": 7,
+        "8": 7,
+        "9": 7,
+        "10": 7,
+        "11": 7,
+        "12": 7,
+        "13": 7,
+        "14": 7,
+        "15": 7,
+        "16": 7,
+        "17": 7,
+        "18": 7
+      }
+    },
+    "WTBE811MJ": {
+      "LECTURE": {
+        "1": 1,
+        "2": 1,
+        "3": 1,
+        "4": 1,
+        "5": 1,
+        "6": 1,
+        "7": 1,
+        "8": 1,
+        "9": 1,
+        "10": 1,
+        "11": 1,
+        "12": 1,
+        "13": 1,
+        "14": 1,
+        "15": 1,
+        "16": 1,
+        "17": 101,
+        "18": 1
+      }
+    }
+  },
+  "bundlePrice": 1
 }

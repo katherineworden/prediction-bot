@@ -473,12 +473,36 @@ class SlackBot {
     }
     
     try {
-      const blocks = this.formatOrderBook(info);
-      await this.web.chat.postMessage({
-        channel,
-        blocks,
-        thread_ts
-      });
+      // Split outcomes into multiple messages if needed
+      const outcomeEntries = Object.entries(info.outcomes);
+      const outcomesPerMessage = 9; // Each outcome uses ~4 blocks, plus headers
+      
+      if (outcomeEntries.length <= outcomesPerMessage) {
+        // Single message for <= 9 outcomes
+        const blocks = this.formatOrderBook(info, outcomeEntries, 0, outcomeEntries.length);
+        await this.web.chat.postMessage({
+          channel,
+          blocks,
+          thread_ts
+        });
+      } else {
+        // Multiple messages for > 9 outcomes
+        // First message: outcomes 1-9
+        const blocks1 = this.formatOrderBook(info, outcomeEntries, 0, outcomesPerMessage, 1, 2);
+        await this.web.chat.postMessage({
+          channel,
+          blocks: blocks1,
+          thread_ts
+        });
+        
+        // Second message: outcomes 10+
+        const blocks2 = this.formatOrderBook(info, outcomeEntries, outcomesPerMessage, outcomeEntries.length, 2, 2);
+        await this.web.chat.postMessage({
+          channel,
+          blocks: blocks2,
+          thread_ts
+        });
+      }
     } catch (error) {
       console.error('Error sending blocks:', error);
       // Fallback to simple text message
@@ -821,52 +845,65 @@ Market: **LECTURE** (outcomes 1-18: lectures 1-15 + guest lectures 16-18)
     await this.sendMessage(channel, helpText, thread_ts);
   }
 
-  formatOrderBook(info) {
-    const blocks = [
-      {
+  formatOrderBook(info, outcomeEntries, startIdx, endIdx, part = null, totalParts = null) {
+    const blocks = [];
+    
+    // Add header only for first message or when not splitting
+    if (!part || part === 1) {
+      blocks.push({
         type: 'header',
         text: {
           type: 'plain_text',
           text: `Market: ${info.description}`
         }
-      }
-    ];
+      });
 
-    // Add resolution status if market is resolved
-    if (info.resolved) {
+      // Add resolution status if market is resolved
+      if (info.resolved) {
+        blocks.push({
+          type: 'section',
+          text: {
+            type: 'mrkdwn',
+            text: `🏁 *RESOLVED* - Winning Outcome: ${info.winningOutcome}`
+          }
+        });
+      } else {
+        blocks.push({
+          type: 'section',
+          fields: [
+            {
+              type: 'mrkdwn',
+              text: `*Sum of Best Bids:* $${info.totalBestBids.toFixed(2)}`
+            },
+            {
+              type: 'mrkdwn',
+              text: `*Sum of Best Asks:* $${info.totalBestAsks.toFixed(2)}`
+            }
+          ]
+        });
+      }
+      
+      blocks.push({
+        type: 'divider'
+      });
+    }
+    
+    // Add part indicator if splitting
+    if (part && totalParts) {
       blocks.push({
         type: 'section',
         text: {
           type: 'mrkdwn',
-          text: `🏁 *RESOLVED* - Winning Outcome: ${info.winningOutcome}`
+          text: `_Showing outcomes ${startIdx + 1}-${endIdx} (Part ${part} of ${totalParts})_`
         }
       });
-    } else {
       blocks.push({
-        type: 'section',
-        fields: [
-          {
-            type: 'mrkdwn',
-            text: `*Sum of Best Bids:* $${info.totalBestBids.toFixed(2)}`
-          },
-          {
-            type: 'mrkdwn',
-            text: `*Sum of Best Asks:* $${info.totalBestAsks.toFixed(2)}`
-          }
-        ]
+        type: 'divider'
       });
     }
     
-    blocks.push({
-      type: 'divider'
-    });
-    
-    // Limit outcomes to prevent exceeding 50 blocks
-    const maxOutcomes = 10; // Each outcome uses ~4 blocks
-    const outcomeEntries = Object.entries(info.outcomes);
-    const displayOutcomes = outcomeEntries.slice(0, maxOutcomes);
-    
     // Add each outcome's order book
+    const displayOutcomes = outcomeEntries.slice(startIdx, endIdx);
     for (const [outcomeId, outcome] of displayOutcomes) {
       // Limit orders shown per outcome
       const maxOrdersPerSide = 5;
@@ -911,17 +948,6 @@ Market: **LECTURE** (outcomes 1-18: lectures 1-15 + guest lectures 16-18)
       });
       
       blocks.push({ type: 'divider' });
-    }
-    
-    // Add note if outcomes were truncated
-    if (outcomeEntries.length > maxOutcomes) {
-      blocks.push({
-        type: 'section',
-        text: {
-          type: 'mrkdwn',
-          text: `_...and ${outcomeEntries.length - maxOutcomes} more outcomes_`
-        }
-      });
     }
     
     return blocks;

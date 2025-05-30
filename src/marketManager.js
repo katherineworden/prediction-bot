@@ -8,13 +8,20 @@ class MarketManager {
     this.userBalances = new Map();
     this.userPositions = new Map();
     this.bundlePrice = 1; // Price for a complete set of all outcomes
+    this.isRestoring = false; // Flag to disable saving during restoration
     
     // Use a fixed path to a file that's part of the codebase
     this.dataFile = path.join(__dirname, '../market_data.json');
+    this.transactionHistoryFile = path.join(__dirname, '../complete_transaction_history.json');
     console.log(`Using data file at: ${this.dataFile}`);
     
-    // Load saved data from the bundled file
-    this.loadData();
+    // Try to restore from transaction history first
+    const restored = this.restoreFromTransactionHistory();
+    
+    if (!restored) {
+      // If no transaction history, load saved data from the bundled file
+      this.loadData();
+    }
     
     // The file is now read-only in production, so we won't auto-save
     // State will be maintained in memory during the current session
@@ -41,7 +48,8 @@ class MarketManager {
       resolved: false
     });
     
-    // Market created - for backup purposes, you can call saveData() locally
+    // Save data after creating market
+    this.saveData();
     
     return this.markets.get(marketId);
   }
@@ -95,6 +103,7 @@ class MarketManager {
       marketPositions.set(outcomeId, currentPosition + quantity);
     }
     
+    this.saveData();
     return { bundlesBought: quantity, cost };
   }
 
@@ -133,6 +142,7 @@ class MarketManager {
     const balance = this.getUserBalance(userId);
     this.userBalances.set(userId, balance + revenue);
     
+    this.saveData();
     return { bundlesSold: quantity, revenue };
   }
 
@@ -204,6 +214,7 @@ class MarketManager {
       
       // If everything was matched, there's no need to update the order
       if (remainingQuantity === 0) {
+        this.saveData();
         return { order, matches };
       }
       
@@ -211,6 +222,7 @@ class MarketManager {
       order.quantity = remainingQuantity;
     }
     
+    this.saveData();
     return { order, matches };
   }
 
@@ -257,6 +269,7 @@ class MarketManager {
       
       // If everything was matched, there's no need to update anything
       if (remainingQuantity === 0) {
+        this.saveData();
         return { order, matches };
       }
       
@@ -264,6 +277,7 @@ class MarketManager {
       order.quantity = remainingQuantity;
     }
     
+    this.saveData();
     return { order, matches };
   }
 
@@ -306,6 +320,7 @@ class MarketManager {
       throw new Error(`Only ${quantity - remainingQuantity} units could be filled`);
     }
     
+    this.saveData();
     return { filled, totalCost: filled.reduce((sum, f) => sum + f.price * f.quantity, 0) };
   }
 
@@ -334,6 +349,7 @@ class MarketManager {
       throw new Error(`Only ${quantity - remainingQuantity} units could be filled`);
     }
     
+    this.saveData();
     return { filled, totalRevenue: filled.reduce((sum, f) => sum + f.price * f.quantity, 0) };
   }
 
@@ -427,6 +443,7 @@ class MarketManager {
       marketPositions.set(outcomeId, currentPosition + cancelledOrder.quantity);
     }
     
+    this.saveData();
     return cancelledOrder;
   }
 
@@ -502,6 +519,7 @@ class MarketManager {
     
     // Market resolved - data is kept in memory
     
+    this.saveData();
     return { winningOutcome: winningOutcomeId };
   }
   
@@ -558,6 +576,9 @@ class MarketManager {
   
   // This method is now only used for backing up data manually
   saveData() {
+    // Skip saving during restoration to avoid spam
+    if (this.isRestoring) return;
+    
     try {
       const data = this.serializeData();
       console.log(`Current market state: ${Object.keys(data.markets).length} markets, ${Object.keys(data.userBalances).length} users`);
@@ -581,6 +602,137 @@ class MarketManager {
     return this.serializeData();
   }
   
+  // Restore market state from transaction history
+  restoreFromTransactionHistory() {
+    try {
+      console.log('=== Attempting to restore from transaction history ===');
+      
+      if (!fs.existsSync(this.transactionHistoryFile)) {
+        console.log('No transaction history found');
+        return false;
+      }
+
+      const historyData = JSON.parse(fs.readFileSync(this.transactionHistoryFile, 'utf8'));
+      const transactions = historyData.transactions;
+      
+      console.log(`Found ${transactions.length} transactions to replay`);
+      
+      // First, create the LECTURE market
+      const outcomes = [];
+      for (let i = 1; i <= 18; i++) {
+        outcomes.push({
+          id: i.toString(),
+          name: i <= 15 ? `Lecture ${i}` : `Guest Lecture ${i}`
+        });
+      }
+      
+      try {
+        this.createMarket('LECTURE', 'Which lecture will be voted most popular?', outcomes);
+      } catch (e) {
+        console.log('Market already exists');
+      }
+
+      // Initialize all users from metadata
+      if (historyData.metadata && historyData.metadata.allUsers) {
+        historyData.metadata.allUsers.forEach(userId => {
+          this.userBalances.set(userId, 1000); // Starting balance
+          this.userPositions.set(userId, new Map());
+        });
+      }
+
+      // Process transactions
+      let successCount = 0;
+      let failCount = 0;
+
+      // Set restoration flag to disable saving
+      this.isRestoring = true;
+
+      for (const tx of transactions) {
+        try {
+          this.processHistoricalTransaction(tx);
+          successCount++;
+        } catch (error) {
+          failCount++;
+          // Only log unexpected errors
+          if (!error.message.includes('Insufficient') && 
+              !error.message.includes('No positions') &&
+              !error.message.includes('not found')) {
+            console.log(`Error on tx ${tx.line}: ${error.message}`);
+          }
+        }
+      }
+
+      // Clear restoration flag
+      this.isRestoring = false;
+
+      console.log(`Restoration complete: ${successCount} successful, ${failCount} failed`);
+      console.log(`Active users: ${this.userBalances.size}`);
+      
+      // Show market summary
+      const marketInfo = this.getMarketInfo('LECTURE');
+      if (marketInfo) {
+        console.log(`Market has ${Object.keys(marketInfo.outcomes).length} outcomes`);
+        console.log(`Sum of best bids: $${marketInfo.totalBestBids.toFixed(2)}`);
+        console.log(`Sum of best asks: $${marketInfo.totalBestAsks.toFixed(2)}`);
+      }
+      
+      // Save the restored state
+      this.saveData();
+      
+      return true;
+    } catch (error) {
+      console.error('Failed to restore from transaction history:', error);
+      return false;
+    }
+  }
+
+  processHistoricalTransaction(tx) {
+    switch (tx.action) {
+      case 'BUNDLE_BUY':
+        this.buyBundle(tx.user, 'LECTURE', tx.bundles);
+        break;
+        
+      case 'BUNDLE_SELL':
+      case 'BUNDLE_SELL_ATTEMPT':
+        if (tx.success !== false) {
+          try {
+            this.sellBundle(tx.user, 'LECTURE', tx.bundles || 1);
+          } catch (e) {
+            // Expected failures
+          }
+        }
+        break;
+        
+      case 'BUY_ORDER':
+        this.placeBuyOrder(tx.user, 'LECTURE', tx.outcome.toString(), tx.price, tx.shares);
+        break;
+        
+      case 'SELL_ORDER':
+        this.placeSellOrder(tx.user, 'LECTURE', tx.outcome.toString(), tx.price, tx.shares);
+        break;
+        
+      case 'CANCEL_ORDER':
+        try {
+          const market = this.getMarket('LECTURE');
+          const outcome = market.outcomes.get(tx.outcome.toString());
+          if (outcome) {
+            outcome.orderBook.cancelOrder(tx.orderId, tx.user);
+          }
+        } catch (e) {
+          // Order might be already executed
+        }
+        break;
+        
+      case 'MARKET_BUY':
+        this.marketBuy(tx.user, 'LECTURE', tx.outcome.toString(), tx.shares);
+        break;
+        
+      case 'TRANSACTION':
+        // These happen automatically when orders match
+        break;
+    }
+  }
+
   // Load market data from JSON file
   loadData() {
     try {
