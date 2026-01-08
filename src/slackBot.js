@@ -120,6 +120,12 @@ class SlackBot {
         case 'help':
           await this.handleHelp(channel, userId, thread_ts);
           break;
+        case 'leaderboard':
+          await this.handleLeaderboard(channel, userId, argsText, thread_ts);
+          break;
+        case 'winners':
+          await this.handleWinners(channel, userId, argsText, thread_ts);
+          break;
         default:
           await this.handleHelp(channel, userId, thread_ts);
       }
@@ -814,6 +820,99 @@ class SlackBot {
     }
   }
 
+  async handleLeaderboard(channel, userId, argsText, thread_ts) {
+    // Parse arguments
+    const regex = /([^\s"]+)|"([^"]*)"/g;
+    const args = [];
+    let match;
+
+    while ((match = regex.exec(argsText)) !== null) {
+      args.push(match[1] || match[2]);
+    }
+
+    const marketId = args[0]?.toUpperCase();
+    const limit = parseInt(args[1]) || 10;
+
+    try {
+      const leaderboard = this.marketManager.getLeaderboard(marketId);
+
+      if (leaderboard.length === 0) {
+        await this.sendMessage(channel, 'No users have traded yet.', thread_ts);
+        return;
+      }
+
+      let text = marketId
+        ? `*Leaderboard for ${marketId}:*\n`
+        : '*Overall Leaderboard:*\n';
+
+      const topTraders = leaderboard.slice(0, limit);
+
+      for (const trader of topTraders) {
+        const profitSign = trader.profit >= 0 ? '+' : '';
+        const profitColor = trader.profit >= 0 ? '📈' : '📉';
+        text += `${trader.rank}. <@${trader.userId}> - $${trader.balance.toFixed(2)} (${profitSign}$${trader.profit.toFixed(2)}) ${profitColor}\n`;
+      }
+
+      if (leaderboard.length > limit) {
+        text += `\n_Showing top ${limit} of ${leaderboard.length} traders_`;
+      }
+
+      await this.sendMessage(channel, text, thread_ts);
+    } catch (error) {
+      await this.sendMessage(channel, `Error: ${error.message}`, thread_ts);
+    }
+  }
+
+  async handleWinners(channel, userId, argsText, thread_ts) {
+    // Parse arguments
+    const regex = /([^\s"]+)|"([^"]*)"/g;
+    const args = [];
+    let match;
+
+    while ((match = regex.exec(argsText)) !== null) {
+      args.push(match[1] || match[2]);
+    }
+
+    const marketId = args[0]?.toUpperCase();
+
+    if (!marketId) {
+      await this.sendMessage(channel, 'Usage: @bot winners <market_id>', thread_ts);
+      return;
+    }
+
+    try {
+      const market = this.marketManager.getMarket(marketId);
+
+      if (!market) {
+        await this.sendMessage(channel, `Market '${marketId}' not found.`, thread_ts);
+        return;
+      }
+
+      if (!market.resolved) {
+        await this.sendMessage(channel, `Market '${marketId}' has not been resolved yet.`, thread_ts);
+        return;
+      }
+
+      const winners = this.marketManager.getWinners(marketId);
+      const winningOutcome = market.outcomes.get(winners.winningOutcome);
+      const outcomeName = winningOutcome ? winningOutcome.name : winners.winningOutcome;
+
+      let text = `*🏆 Winners for ${marketId}*\n`;
+      text += `*Winning Outcome:* ${outcomeName} (ID: ${winners.winningOutcome})\n\n`;
+      text += `*Top Traders:*\n`;
+
+      for (const trader of winners.topTraders) {
+        const profitSign = trader.profit >= 0 ? '+' : '';
+        const medal = trader.rank <= 3 ? ['🥇', '🥈', '🥉'][trader.rank - 1] : `${trader.rank}.`;
+        text += `${medal} <@${trader.userId}> - $${trader.balance.toFixed(2)} (${profitSign}$${trader.profit.toFixed(2)})\n`;
+      }
+
+      await this.sendMessage(channel, text, thread_ts);
+    } catch (error) {
+      await this.sendMessage(channel, `Error: ${error.message}`, thread_ts);
+    }
+  }
+
   async handleHelp(channel, userId, thread_ts) {
     const isAdmin = this.isAdmin(userId);
     let helpText = `
@@ -830,9 +929,11 @@ Market: **LECTURE** (outcomes 1-18: lectures 1-15 + guest lectures 16-18)
 • \`@bot position <market_id>\` or \`@bot positions <market_id>\` - Show your positions (private)
 • \`@bot orders <market_id>\` - Show your open orders (private)
 • \`@bot cancel <market_id> <outcome_id> <order_id>\` - Cancel order
+• \`@bot leaderboard [market_id] [limit]\` - Show top traders ranked by balance
+• \`@bot winners <market_id>\` - Show winners after market resolves
 
 *DM Commands:* \`balance\`, \`positions LECTURE\`, \`bundle-buy\`, \`bundle-sell\``;
-    
+
     if (isAdmin) {
       helpText += `
 
@@ -841,7 +942,7 @@ Market: **LECTURE** (outcomes 1-18: lectures 1-15 + guest lectures 16-18)
 • \`@bot resolve <market_id> <winning_outcome_id>\` - Resolve market
 • \`@bot export-data\` - Export market data`;
     }
-    
+
     await this.sendMessage(channel, helpText, thread_ts);
   }
 

@@ -285,7 +285,8 @@ class MarketManager {
     this.initializeUser(userId);
     const market = this.getMarket(marketId);
     if (!market) throw new Error('Market not found');
-    
+    if (market.resolved) throw new Error('Cannot trade on resolved market');
+
     // Validate quantity
     if (!Number.isInteger(quantity) || quantity <= 0) {
       throw new Error('Quantity must be a positive integer');
@@ -328,7 +329,8 @@ class MarketManager {
     this.initializeUser(userId);
     const market = this.getMarket(marketId);
     if (!market) throw new Error('Market not found');
-    
+    if (market.resolved) throw new Error('Cannot trade on resolved market');
+
     // Validate quantity
     if (!Number.isInteger(quantity) || quantity <= 0) {
       throw new Error('Quantity must be a positive integer');
@@ -467,6 +469,107 @@ class MarketManager {
     return allOrders.sort((a, b) => b.timestamp - a.timestamp);
   }
 
+  // Get leaderboard showing all users ranked by balance
+  getLeaderboard(marketId = null) {
+    const leaderboard = [];
+
+    for (const [userId, balance] of this.userBalances) {
+      const userData = {
+        userId,
+        balance: Math.round(balance * 100) / 100,
+        profit: Math.round((balance - 1000) * 100) / 100, // Profit from starting $1000
+        positions: {}
+      };
+
+      // Get positions for the specified market or all markets
+      const userPositions = this.userPositions.get(userId);
+      if (userPositions) {
+        if (marketId) {
+          const marketPositions = userPositions.get(marketId);
+          if (marketPositions) {
+            for (const [outcomeId, quantity] of marketPositions) {
+              if (quantity > 0) {
+                userData.positions[outcomeId] = quantity;
+              }
+            }
+          }
+        } else {
+          // All markets
+          for (const [mktId, marketPositions] of userPositions) {
+            userData.positions[mktId] = {};
+            for (const [outcomeId, quantity] of marketPositions) {
+              if (quantity > 0) {
+                userData.positions[mktId][outcomeId] = quantity;
+              }
+            }
+          }
+        }
+      }
+
+      // Calculate total shares held
+      let totalShares = 0;
+      if (marketId && userPositions) {
+        const marketPositions = userPositions.get(marketId);
+        if (marketPositions) {
+          for (const [_, quantity] of marketPositions) {
+            totalShares += quantity;
+          }
+        }
+      }
+      userData.totalShares = totalShares;
+
+      // Calculate escrowed funds (in open orders)
+      let escrowedFunds = 0;
+      let escrowedShares = 0;
+      if (marketId) {
+        const market = this.getMarket(marketId);
+        if (market) {
+          for (const [outcomeId, outcome] of market.outcomes) {
+            const userOrders = outcome.orderBook.getUserOrders(userId);
+            for (const order of userOrders) {
+              if (order.side === 'buy') {
+                escrowedFunds += order.price * order.quantity;
+              } else {
+                escrowedShares += order.quantity;
+              }
+            }
+          }
+        }
+      }
+      userData.escrowedFunds = Math.round(escrowedFunds * 100) / 100;
+      userData.escrowedShares = escrowedShares;
+      userData.totalValue = Math.round((balance + escrowedFunds) * 100) / 100;
+
+      leaderboard.push(userData);
+    }
+
+    // Sort by balance (or total value) descending
+    leaderboard.sort((a, b) => b.balance - a.balance);
+
+    // Add rank
+    leaderboard.forEach((user, index) => {
+      user.rank = index + 1;
+    });
+
+    return leaderboard;
+  }
+
+  // Get top winners after market resolution
+  getWinners(marketId) {
+    const market = this.getMarket(marketId);
+    if (!market || !market.resolved) {
+      return null;
+    }
+
+    const leaderboard = this.getLeaderboard();
+    return {
+      marketId,
+      winningOutcome: market.winningOutcome,
+      resolved: true,
+      topTraders: leaderboard.slice(0, 10) // Top 10
+    };
+  }
+
   resolveMarket(marketId, winningOutcomeId) {
     const market = this.getMarket(marketId);
     if (!market) throw new Error('Market not found');
@@ -574,26 +677,51 @@ class MarketManager {
     };
   }
   
-  // This method is now only used for backing up data manually
+  // Save market data to JSON file
+  // This works on Oracle Cloud VMs which have persistent storage
   saveData() {
     // Skip saving during restoration to avoid spam
     if (this.isRestoring) return;
-    
+
     try {
       const data = this.serializeData();
       console.log(`Current market state: ${Object.keys(data.markets).length} markets, ${Object.keys(data.userBalances).length} users`);
-      
-      // In production, we can't write to the filesystem, so we just log the data
-      if (process.env.NODE_ENV === 'production') {
-        console.log('In production mode, data backup is not available');
-        return;
+
+      // Determine the data directory - use DATA_DIR env var if set, otherwise use default
+      const dataDir = process.env.DATA_DIR || path.join(__dirname, '..');
+      const dataFile = path.join(dataDir, 'market_data.json');
+
+      // Create backup before saving
+      if (fs.existsSync(dataFile)) {
+        const backupFile = path.join(dataDir, `market_data_backup_${Date.now()}.json`);
+        try {
+          fs.copyFileSync(dataFile, backupFile);
+          // Keep only the last 5 backups
+          const backups = fs.readdirSync(dataDir)
+            .filter(f => f.startsWith('market_data_backup_'))
+            .sort()
+            .reverse();
+          backups.slice(5).forEach(f => {
+            try {
+              fs.unlinkSync(path.join(dataDir, f));
+            } catch (e) { /* ignore cleanup errors */ }
+          });
+        } catch (e) {
+          console.log('Could not create backup:', e.message);
+        }
       }
-      
-      // For local development, we write to the data file
-      fs.writeFileSync(this.dataFile, JSON.stringify(data, null, 2));
-      console.log(`Market data backed up to ${this.dataFile}`);
+
+      // Write data with atomic write (write to temp file, then rename)
+      const tempFile = dataFile + '.tmp';
+      fs.writeFileSync(tempFile, JSON.stringify(data, null, 2));
+      fs.renameSync(tempFile, dataFile);
+      console.log(`Market data saved to ${dataFile}`);
     } catch (error) {
-      console.error(`Error backing up market data: ${error.message}`);
+      console.error(`Error saving market data: ${error.message}`);
+      // Log the data to console as a last resort backup
+      console.log('=== EMERGENCY DATA DUMP ===');
+      console.log(JSON.stringify(this.serializeData()));
+      console.log('=== END EMERGENCY DATA DUMP ===');
     }
   }
   
@@ -780,6 +908,15 @@ class MarketManager {
               orderBook.lastPrice = outcomeData.orderBook.lastPrice;
               orderBook.volume = outcomeData.orderBook.volume || 0;
               orderBook.changePercent = outcomeData.orderBook.changePercent || 0;
+              // Restore nextOrderId to prevent ID collisions after restart
+              if (outcomeData.orderBook.nextOrderId) {
+                orderBook.nextOrderId = outcomeData.orderBook.nextOrderId;
+              } else {
+                // Calculate nextOrderId from existing orders
+                const maxBidId = orderBook.bids.reduce((max, o) => Math.max(max, o.id || 0), 0);
+                const maxAskId = orderBook.asks.reduce((max, o) => Math.max(max, o.id || 0), 0);
+                orderBook.nextOrderId = Math.max(maxBidId, maxAskId) + 1;
+              }
             }
             
             market.outcomes.set(outcomeId, {

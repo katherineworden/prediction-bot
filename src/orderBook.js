@@ -9,6 +9,26 @@ class OrderBook {
     this.nextOrderId = 1;
   }
 
+  // Serialize for JSON storage
+  toJSON() {
+    return {
+      outcomeId: this.outcomeId,
+      bids: this.bids,
+      asks: this.asks,
+      lastPrice: this.lastPrice,
+      volume: this.volume,
+      changePercent: this.changePercent,
+      nextOrderId: this.nextOrderId
+    };
+  }
+
+  // Restore nextOrderId to prevent collisions after reload
+  setNextOrderId(id) {
+    if (id > this.nextOrderId) {
+      this.nextOrderId = id;
+    }
+  }
+
   addBid(price, quantity, userId) {
     // Validate inputs
     if (price <= 0 || price >= 1) {
