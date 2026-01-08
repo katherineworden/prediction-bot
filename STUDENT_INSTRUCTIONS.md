@@ -1,190 +1,240 @@
-# Slack Prediction Market Bot - How to Use
+# Slack Prediction Market Bot - Student Guide
 
-> **⚠️ BETA VERSION - PLEASE READ**  
-> This prediction market bot is in beta testing and has only been informally tested among course staff. You may encounter bugs, glitches, or unexpected behavior during use. Please be patient as we work through any issues that arise. If you find bugs or unexpected behavior, that's actually helpful! Please report them in the #help channel - you're helping make the system better for everyone.
+> **Note**: This prediction market bot may have minor bugs. If you find issues, please report them in the #help channel!
 
 ## What is this bot?
 This bot lets you participate in prediction markets right in Slack. You can bet on outcomes of questions, trade with classmates, and see how good you are at predicting the future!
 
 ## About the LECTURE Market
-The only market is called **LECTURE** and has 18 possible outcomes. You are betting on the most popular lecture.
+The main market is called **LECTURE** and has 18 possible outcomes. You are betting on the most popular lecture.
 
 **How this market resolves:** This market will resolve in favor of whichever lecture receives the most student votes on the poll "Which lecture was your favorite this quarter?"
 
-- **Outcomes 1-15**: Regular course lectures 
+- **Outcomes 1-15**: Regular course lectures
 - **Outcomes 16-18**: Guest lectures
   - Lecture 16: Eric Neyman
   - Lecture 17: Kshipra Bhawalkar
   - Lecture 18: Geoff Ramseyer
-- Outcomes are numbered starting from 1 (not 0) as they appear on Ed (the course discussion board)
+- Outcomes are numbered starting from 1 (not 0) as they appear on Ed
 
 ## Getting Started
-- You start with **1000 points** when you first use the bot
+- You start with **$1000** when you first use the bot
 - Tag the bot (@bot) to run commands
 - All trades happen instantly at current market prices
 
-## Commands You Can Use
+---
+
+## Commands Reference
 
 ### Viewing Markets
+| Command | Description |
+|---------|-------------|
+| `@bot list markets` | See all active markets |
+| `@bot market LECTURE` | Get details about a specific market |
+| `@bot leaderboard` | See top traders ranked by balance |
+| `@bot leaderboard LECTURE 20` | See top 20 traders for LECTURE market |
+| `@bot winners LECTURE` | See winners after market resolves |
+
+### Trading Commands
+| Command | Description |
+|---------|-------------|
+| `@bot buy LECTURE 5 10 0.45` | Buy 10 shares of outcome 5 at $0.45 each |
+| `@bot sell LECTURE 5 10 0.60` | Sell 10 shares of outcome 5 at $0.60 each |
+| `@bot bundle-buy LECTURE 5` | Buy 5 complete sets ($5 total) |
+| `@bot bundle-sell LECTURE 5` | Sell 5 complete sets (get $5 back) |
+| `@bot cancel LECTURE 5 123` | Cancel order ID 123 for outcome 5 |
+
+### Check Your Status (Private - Only You See)
+| Command | Description |
+|---------|-------------|
+| `@bot balance` | See how much money you have |
+| `@bot positions LECTURE` | See all your current holdings |
+| `@bot orders LECTURE` | View your open orders |
+| `@bot help` | Show all commands |
+
+---
+
+## DM Commands (Private)
+
+You can message the bot directly (no @mention needed) for private operations:
+
 ```
-@bot list markets          - See all active markets
-@bot market [market_id]    - Get details about a specific market (case-insensitive)
+balance                    - Check your money
+positions LECTURE          - Check your holdings
+orders LECTURE             - View your open orders
+bundle-buy LECTURE 5       - Buy 5 bundles privately
+bundle-sell LECTURE 5      - Sell 5 bundles privately
+list                       - Show all markets
+help                       - Get help
 ```
 
-### Trading
-```
-@bot buy [market_id] [outcome_id] [shares] [price]  - Buy shares in an outcome
-@bot sell [market_id] [outcome_id] [shares] [price] - Sell shares you own
-@bot bundle-buy [market_id] [shares]                - Buy 1 share of each outcome (please DM the bot this command)
-@bot bundle-sell [market_id] [shares]               - Sell 1 share of each outcome (please DM the bot this command)
-@bot cancel [market_id] [outcome_id] [order_id]     - Cancel an open order
-```
-
-**Note:** If you try to buy/sell without a price and see "Only 0 units could be filled", it means there are no matching orders. You need to place a limit order with a price instead.
-
-**Examples:**
-```
-@bot buy LECTURE 5 10 0.45   - Buy 10 shares of lecture 5 at $0.45 each
-@bot sell LECTURE 12 5 0.60  - Sell 5 shares of lecture 12 at $0.60 each
-@bot bundle-buy LECTURE 3    - Buy 3 complete sets (private confirmation)
-@bot cancel LECTURE 5 123    - Cancel order ID 123
-```
-
-### Check Your Status (you can DM these commands directly without tagging the bot)
-```
-@bot balance              - See how many points you have
-@bot position LECTURE     - See all your current holdings
-@bot positions LECTURE    - Same as above (both work)
-@bot orders LECTURE       - View your open orders
-@bot help                 - Show all commands
-```
-
+---
 
 ## Privacy: What's Public vs Private
 
-### 🔒 Private (Only You See)
-- **Your balance** - How much money you have
-- **Your positions** - What shares you own
-- **Your open orders** - Your pending buy/sell orders
-- **Bundle operations** - Your bundle buy/sell confirmations
-- **Error messages** - When something goes wrong
+### Private (Only You See)
+- Your balance
+- Your positions (what shares you own)
+- Your open orders
+- Bundle operations confirmations
+- Error messages
 
-### 🌐 Public (Everyone Sees)
-- **Buy/sell confirmations** - When you place an order (with Order ID)
-- **Transaction matches** - When orders execute between traders
-- **Market information** - Current prices and order books
-- **Market creation** - New markets being created
+### Public (Everyone Sees)
+- Buy/sell order confirmations (with Order ID)
+- Transaction matches between traders
+- Market information and order books
+- Leaderboard rankings
 
-### 💬 Also Available in DMs
-You should DM the bot directly for:
-- `balance` - Check your money privately
-- `positions LECTURE` - Check your holdings privately
-- `bundle-buy LECTURE [SHARES]` - Buy bundles privately
-- `bundle-sell LECTURE [SHARES]` - Sell bundles privately
-- `orders LECTURE` - View your open orders privately
-- `help` - Get help privately
+---
 
-## How Markets Work
+## Understanding Prices
 
-### Pricing
-- Prices change based on supply and demand
-- Popular outcomes get more expensive
-- Unpopular outcomes get cheaper
-- Bundle buying/selling keeps prices fair
+Prices represent probability:
+| Price | Meaning |
+|-------|---------|
+| $0.70 | 70% chance of happening |
+| $0.30 | 30% chance of happening |
+| $0.90 | Very likely (90%) |
+| $0.10 | Very unlikely (10%) |
 
-### Making Money
-- Buy low, sell high
-- If you're right about an outcome, you win points when the market resolves
-- If you're wrong, you lose the points you spent
+**Key insight:** All outcome prices in a market should add up to approximately $1.00. If they don't, there may be arbitrage opportunities through bundle trading!
 
-### Market Resolution
-- Staff will resolve markets at the end of the quarter
-- Winners get paid based on the final outcome
-- Losers lose their investment
+---
+
+## How to Trade
+
+### Step 1: Get Shares
+Before you can sell shares, you need to own them. Two ways to get shares:
+
+**Option A: Buy a bundle** (recommended for beginners)
+```
+@bot bundle-buy LECTURE 5
+```
+This costs $5 and gives you 5 shares of EVERY outcome (5 x 18 = 90 total shares).
+
+**Option B: Buy from another trader**
+```
+@bot buy LECTURE 8 10 0.50
+```
+This places a buy order for 10 shares of outcome 8 at $0.50 each.
+
+### Step 2: Sell What You Don't Want
+If you bought bundles, sell the outcomes you think WON'T win:
+```
+@bot sell LECTURE 3 5 0.40
+```
+Sell 5 shares of outcome 3 at $0.40 each.
+
+### Step 3: Keep What You Think Will Win
+Hold onto shares of outcomes you think will win. If correct, each share pays $1!
+
+### Step 4: Check the Leaderboard
+```
+@bot leaderboard
+```
+See how you rank against other traders!
+
+---
 
 ## Example Trading Session
 
-1. **See what markets exist:**
-   ```
-   @bot list markets
-   ```
+```
+# 1. Check your balance
+@bot balance
 
-2. **Check market details:**
-   ```
-   @bot market LECTURE
-   ```
+# 2. See the market
+@bot market LECTURE
 
-3. **Buy some shares:**
-   ```
-   @bot buy LECTURE 8 20 0.55
-   ```
-   (Buy 20 shares of lecture 8 at $0.55 each - public confirmation, you get Order ID)
+# 3. Buy 10 complete sets ($10)
+@bot bundle-buy LECTURE 10
 
-4. **Check your position privately:**
-   ```
-   @bot positions LECTURE
-   ```
-   (Only you see your holdings)
+# 4. You now have 10 shares of each outcome
+@bot positions LECTURE
 
-5. **Check your orders privately:**
-   ```
-   @bot orders LECTURE
-   ```
-   (Only you see your pending orders)
+# 5. Sell outcomes you think won't win
+@bot sell LECTURE 3 10 0.08    # Sell all Lecture 3 shares
+@bot sell LECTURE 7 10 0.05    # Sell all Lecture 7 shares
 
-6. **Cancel or sell if price moves:**
-   ```
-   @bot cancel LECTURE 8 123    # Cancel order ID 123
-   @bot sell LECTURE 8 10 0.65  # Or sell at higher price
-   ```
+# 6. Buy more of outcomes you like
+@bot buy LECTURE 5 20 0.15     # Buy 20 more Lecture 5 shares
 
-## Understanding the Numbers
+# 7. Check the leaderboard
+@bot leaderboard
 
-When you see a market, prices show probability:
-- **$0.70** = 70% chance of happening
-- **$0.30** = 30% chance of happening  
-- **$0.90** = 90% chance (very likely)
-- **$0.10** = 10% chance (very unlikely)
+# 8. Check your orders
+@bot orders LECTURE
 
-All outcome prices in a market add up to $1.00.
+# 9. Cancel an order if needed
+@bot cancel LECTURE 5 123      # Cancel order ID 123
+```
 
-**Sum of Best Bids/Asks:** When viewing a market, you'll see these sums. In an efficient market, they should both be close to $1.00. If the sum is significantly below or above $1.00, there may be arbitrage opportunities through bundle trading!
+---
+
+## Leaderboard & Winners
+
+### During the Market
+Use `@bot leaderboard` to see current rankings:
+- Shows all traders sorted by balance
+- Displays profit/loss from starting $1000
+- Updates in real-time as trades happen
+
+### After Market Resolves
+Use `@bot winners LECTURE` to see final results:
+- Shows the winning outcome
+- Displays top traders with medals
+- Shows final profit/loss for each trader
+
+---
 
 ## Common Questions
 
 **Q: How do I make money?**
-A: Buy shares when you think they're underpriced, sell when overpriced, or hold until market resolves if you're confident.
+A: Buy shares when you think they're underpriced, sell when overpriced. If your chosen outcome wins, each share pays $1!
 
 **Q: Can I lose more than I have?**
-A: No! The bot prevents you from spending more points than you have.
+A: No! The bot prevents you from spending more than your balance.
 
-**Q: Can I create my own markets?**
-A: No, only staff can create and resolve markets.
+**Q: What's bundle trading?**
+A: Buying a bundle gives you 1 share of EVERY outcome for $1. This guarantees you'll win $1 when the market resolves (since exactly one outcome wins). It's useful for getting initial shares to sell.
+
+**Q: Can I cancel a trade?**
+A: Yes! Cancel unfilled orders with `@bot cancel LECTURE [outcome_id] [order_id]`. Once an order matches with another trader, it's final.
+
+**Q: How do I find my Order ID?**
+A: When you place an order, you get a confirmation with the Order ID. Also use `@bot orders LECTURE` to see all your open orders with their IDs.
+
+**Q: What does "Only 0 units could be filled" mean?**
+A: There are no matching orders at market price. Place a limit order with a price instead:
+```
+@bot buy LECTURE 5 10 0.40   # Buy at $0.40 limit
+```
+
+**Q: How do I see my ranking?**
+A: Use `@bot leaderboard` to see where you stand among all traders!
 
 **Q: When do markets close?**
 A: Staff will resolve markets at the end of the quarter when the real outcome is known.
 
-**Q: Can I cancel a trade?**
-A: Yes! You can cancel open orders that haven't been filled yet using `@bot cancel [market_id] [outcome_id] [order_id]`. This returns your escrowed money or shares. However, once an order is executed (matched with another trader), that transaction is final.
+---
 
-**Q: How do I see my trading history?**
-A: Use `@bot positions LECTURE` to see current holdings and `@bot orders LECTURE` to see pending orders. Full history isn't shown but you can track your balance changes.
+## Strategy Tips
 
-**Q: How do I find my Order ID to cancel?**
-A: When you place a buy or sell order, you'll get a confirmation message with the Order ID. You can also use `@bot orders LECTURE` to see all your open orders with their IDs.
+1. **Start with bundles** - Buy complete sets to get shares of every outcome
+2. **Sell what you don't believe in** - Get rid of outcomes you think won't win
+3. **Buy what others undervalue** - If you think an outcome is more likely than the market price suggests, buy!
+4. **Watch the leaderboard** - See what strategies are working for top traders
+5. **Check the order book** - Use `@bot market LECTURE` to see current bid/ask prices
+6. **Arbitrage opportunities** - If sum of best bids or asks isn't close to $1, there may be profit opportunities
 
-**Q: What happens if I run out of points?**
-A: You can still participate in markets that resolve in your favor, but you won't be able to make new trades until your balance increases.
+---
 
 ## Getting Help
 
 - Use `@bot help` anytime to see available commands
+- Check `@bot leaderboard` to see how you're doing
 - Ask questions in the channel - other students can help too!
-- Check your balance regularly to track your performance
+- DM the bot for private commands
 
 ---
 
-**Have fun predicting the future! 🔮📈**
-
----
-*Created by Katherine Worden*
+**Have fun predicting the future! Good luck!**
